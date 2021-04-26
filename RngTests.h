@@ -1,0 +1,12 @@
+//
+// Created by chris on 26.04.21.
+//
+
+#ifndef NUMERISCHEMETHODENSTATISTISCHENPHYSIK_RNGTESTS_H
+#define NUMERISCHEMETHODENSTATISTISCHENPHYSIK_RNGTESTS_H
+
+// Starts the Project RngTests. Returns 0 if no error occurs.
+int runRngTests();
+
+
+#endif //NUMERISCHEMETHODENSTATISTISCHENPHYSIK_RNGTESTS_H
