@@ -1,8 +1,11 @@
 #include <iostream>
-#include "HelloWorld.h"
-#include "RngTests.h"
+#include "Projects/HelloWorld/HelloWorld.h"
+#include "Projects/RngTests/RngTests.h"
 
 int main() {
+    //TODO insert non-interaction/automatic mode and let user choose between interactive or non-
+
+    // this is the main loop for user interaction and project choosing
     while(true){
     std::cout << "Dies sind die Projekte zur Vorlesung Numerische Methoden der statistischen Physik von Chris Nill 2021"<<std::endl
     <<"Welches Projekt möchtst du starten? Wähle:" << std::endl
