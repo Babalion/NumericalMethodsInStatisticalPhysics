@@ -6,7 +6,7 @@
 
 int runRngTests() {
     std::cout << "This is RngTests." << std::endl;
-    compareRNGs();
+    compareRNGs(1E7,5,10);
     return 0;
 }
 
@@ -90,41 +90,55 @@ double piTest_MT19937(unsigned int n) {
     return piTest(MT19937_List1, MT19937_List2);
 }
 
-void compareRNGs() {
+// compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs.tsv
+// input: max_N: max Number to test (min 100)
+//        step: multiplicative step width (min 2)
+//        amount: amount of tests per number (min 1)
+void compareRNGs(unsigned int max_N, unsigned int step, unsigned int amount) {
     std::list<int> n;
     std::list<double> diff_LCG;
     std::list<double> diff_MT19937;
     std::list<double> time_ms_LCG;
     std::list<double> time_ms_MT19937;
 
-    for (int i = 10; i < 1E8; i *= 5) {
-        std::cout << "Performing pi-Test with log10(n)=" << log10(i) << "...." << std::endl;
-        n.push_back(i);
+    for (int i = 10; i < max_N; i *= step) {
+        for (int j = 0; j < amount; j++) {
+            std::cout << "Performing pi-Test with log10(n)=" << log10(i) << "....("<<j<<"/"<<amount<<")" << std::endl;
+            n.push_back(i);
 
-        std::chrono::steady_clock::time_point begin_LCG = std::chrono::steady_clock::now();
-        diff_LCG.push_back(piTest_LCG(i));
-        std::chrono::steady_clock::time_point end_LCG = std::chrono::steady_clock::now();
-        time_ms_LCG.push_back(std::chrono::duration_cast<std::chrono::milliseconds>(end_LCG - begin_LCG).count());
+            std::chrono::steady_clock::time_point begin_LCG = std::chrono::steady_clock::now();
+            diff_LCG.push_back(piTest_LCG(i));
+            std::chrono::steady_clock::time_point end_LCG = std::chrono::steady_clock::now();
+            time_ms_LCG.push_back(std::chrono::duration_cast<std::chrono::microseconds>(end_LCG - begin_LCG).count());
 
 
-        std::chrono::steady_clock::time_point begin_MT19937 = std::chrono::steady_clock::now();
-        diff_MT19937.push_back(piTest_MT19937(i));
-        std::chrono::steady_clock::time_point end_MT19937 = std::chrono::steady_clock::now();
-        time_ms_MT19937.push_back(
-                std::chrono::duration_cast<std::chrono::milliseconds>(end_MT19937 - begin_MT19937).count());
-
+            std::chrono::steady_clock::time_point begin_MT19937 = std::chrono::steady_clock::now();
+            diff_MT19937.push_back(piTest_MT19937(i));
+            std::chrono::steady_clock::time_point end_MT19937 = std::chrono::steady_clock::now();
+            time_ms_MT19937.push_back(
+                    std::chrono::duration_cast<std::chrono::microseconds>(end_MT19937 - begin_MT19937).count());
+        }
     }
+
+    // Print the results
+    std::ofstream resultsFile;
+    resultsFile.open("compareRNGs.tsv");
 
     auto it1 = n.begin();
     auto it2 = diff_LCG.begin();
     auto it3 = time_ms_LCG.begin();
     auto it4 = diff_MT19937.begin();
     auto it5 = time_ms_MT19937.begin();
-    std::cout << "n\tLCG-diff\tLCG-time\tMT19937-diff\tMT19937-time" << std::endl;
+
+    std::cout << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
+    resultsFile << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
     for (; it1 != n.end() && it2 != diff_LCG.end() && it3 != time_ms_LCG.end()
            && it4 != diff_MT19937.end() && it5 != time_ms_MT19937.end();
            ++it1, ++it2, ++it3, ++it4, ++it5) {
-        std::cout << *it1 << "\t" << *it2 << "\t" << *it3 <<"\t"<< *it4 <<"\t"<< *it5 << std::endl;
+        std::cout << *it1 << "\t" << *it2 << "\t" << *it3 << "\t" << *it4 << "\t" << *it5 << std::endl;
+        resultsFile << *it1 << "\t" << *it2 << "\t" << *it3 << "\t" << *it4 << "\t" << *it5 << std::endl;
     }
+
+    resultsFile.close();
 
 }

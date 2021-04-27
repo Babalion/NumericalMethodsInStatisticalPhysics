@@ -4,7 +4,7 @@ Die hier verwendete Programmiersprache ist C++20. Die IDE ist CLion.
 ## Voraussetzungen, die installiert sein müssen:
 1. CMake https://cmake.org/install/
 2. Armadillo http://arma.sourceforge.net/download.html
-
+3. Matplotlib-cpp from https://github.com/lava/matplotlib-cpp
 
 
 ## Wie starten?
