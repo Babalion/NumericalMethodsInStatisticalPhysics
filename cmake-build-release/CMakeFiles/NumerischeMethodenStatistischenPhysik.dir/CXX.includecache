@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RNG_results.h
+iostream
+-
+random
+-
+cmath
+-
+chrono
+-
+fstream
+-
+thread
+-
+mutex
+-
+vector
+-
+
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RngTests.cpp
+RngTests.h
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RngTests.h
+
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RngTests.h
+RNG_results.h
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RNG_results.h
+

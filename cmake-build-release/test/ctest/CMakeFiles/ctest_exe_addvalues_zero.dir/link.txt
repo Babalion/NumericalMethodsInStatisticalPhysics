@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/ctest_exe_addvalues_zero.dir/addvalues_zero.cpp.o  -o ctest_exe_addvalues_zero 
