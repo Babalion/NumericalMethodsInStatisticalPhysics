@@ -4,19 +4,64 @@
 
 #include "RngTests.h"
 
+//startPoint for RNG-Tests Project. Returns 0 if no error occurs.
 int runRngTests() {
-    std::cout << "This is RngTests." << std::endl;
-    unsigned long long maxN=1E6;
-    unsigned int amount=8;
-    std::cout<<"Until wich Number 10^X would you like to run? 1E4-1E10 are good values."<<std::endl;
-    std::cin>>maxN;
-    maxN=std::pow(10,maxN+1);
-    std::cout<<"How many values per Number should be generated? (1-100)"<<std::endl;
-    std::cin>>amount;
+    std::cout << "This is RngTests. Endless (0) or interactive Mode (1)?" << std::endl;
+    int mode;
+    std::cin >> mode;
+    switch (mode) {
+        case 0:
+            endlessMode();
+            break;
+        case 1:
+            interactiveMode();
+            break;
+        default:
+            runRngTests();
+            break;
+    }
+
+    return 0;
+}
+
+int interactiveMode() {
+    unsigned long long maxN = 1E6;
+    unsigned int amount = 8;
+    std::cout << "Until wich Number 10^X would you like to run? 1E4-1E10 are good values." << std::endl;
+    std::cin >> maxN;
+    maxN = std::pow(10, maxN + 1);
+    std::cout << "How many values per Number should be generated? (1-100)" << std::endl;
+    std::cin >> amount;
 
     RNG_results finalResults;
     compareRNGs_parallel(finalResults, maxN, 10, amount);
     finalResults.saveResults();
+    return 0;
+}
+
+bool stopCommandEndless = false;
+
+//tries to get best value of pi.
+//terminates if you press enter
+int endlessMode() {
+    RNG_results rng;
+    static const unsigned int hardwareCon = std::thread::hardware_concurrency();
+    static const unsigned int supportedThreads = hardwareCon == 0 ? 2 : hardwareCon;
+    std::thread workerThread(
+            [&]() {
+                while (!stopCommandEndless)
+                    compareRNGs_parallel(rng, 1E7, 1E6, 10, 100 * supportedThreads);
+                rng.saveAndClearResults();
+            } // end of lambda expression
+    );
+    workerThread.detach();
+    std::cout << "Press 1 to stop program." << std::endl;
+    char a = 0;
+    while (a != 1) {
+        std::cin >> a;
+    }
+    stopCommandEndless = true;
+    rng.saveAndClearResults();
     return 0;
 }
 
@@ -62,7 +107,7 @@ double RNGs::piTest_MT19937(unsigned long long n) {
 }
 
 RNGs::RNGs() {
-    mt=std::mt19937_64 (rd());
+    mt = std::mt19937_64(rd());
     //initialize MT19937. Therefore let it generate 8E5 random numbers
     // to be sure the initial value doesnt affect randomness badly anymore.
     std::cout << "This is the first run of MT19937, init now!" << std::endl;
@@ -71,15 +116,16 @@ RNGs::RNGs() {
     }
 }
 
-
 // compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs_seq.tsv
 // input: rng: a RNGResults class handling save results
 //        max_N: max Number to test (min 100)
+//        min_N: min Number to test (min 10)
 //        step: multiplicative step width (min 2)
 //        amount: amount of tests per number (min 1)
-void compareRNGs_seq(RNG_results &rng, RNGs &rGen, unsigned long long max_N, unsigned int step, unsigned int amount) {
+void compareRNGs_seq(RNG_results &rng, RNGs &rGen, unsigned long long max_N,
+                     unsigned long long min_N, unsigned int step, unsigned int amount) {
 
-    for (int i = 10; i < max_N; i *= step) {
+    for (int i = min_N; i < max_N; i *= step) {
         for (int j = 0; j < amount; j++) {
             std::cout << "Performing pi-Test with log10(n)=" << log10(i) << "....(" << j + 1 << "/" << amount << ")"
                       << std::endl;
@@ -102,11 +148,22 @@ void compareRNGs_seq(RNG_results &rng, RNGs &rGen, unsigned long long max_N, uns
 }
 
 // compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs_seq.tsv
+// input: rng: a RNGResults class handling save results
+//        max_N: max Number to test (min 100)
+//        step: multiplicative step width (min 2)
+//        amount: amount of tests per number (min 1)
+void compareRNGs_seq_(RNG_results &rng, RNGs &rGen, unsigned long long max_N,
+                      unsigned int step, unsigned int amount) {
+    compareRNGs_seq(rng, rGen, max_N, 10, step, amount);
+}
+
+// compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs.tsv
 // Calculation is done parallel
 // input: max_N: max Number to test (min 100)
 //        step: multiplicative step width (min 2)
 //        amount: amount of tests per number (min 1)
-void compareRNGs_parallel(RNG_results &rng, unsigned long long max_N, unsigned int step, unsigned int amount) {
+void compareRNGs_parallel(RNG_results &rng, unsigned long long max_N, unsigned long long min_N, unsigned int step,
+                          unsigned int amount) {
     // Calculate amount of threads
     static const unsigned int hardwareCon = std::thread::hardware_concurrency();
     static const unsigned int supportedThreads = hardwareCon == 0 ? 2 : hardwareCon;
@@ -124,19 +181,24 @@ void compareRNGs_parallel(RNG_results &rng, unsigned long long max_N, unsigned i
     std::vector<RNGs> rGen(amountOfThreads);
 
     for (int i = 0; i < threads.size(); i++) {
-        threads[i] = std::thread(compareRNGs_seq, std::ref(rng), std::ref(rGen[i]), max_N, step,
+        threads[i] = std::thread(compareRNGs_seq, std::ref(rng), std::ref(rGen[i]), max_N, min_N, step,
                                  static_cast<int>(WorkPerThread));
     }
 
-    compareRNGs_seq(rng, rGen[threads.size()], max_N, step, amount - WorkPerThread * amountOfThreads+1);
+    compareRNGs_seq(rng, rGen[threads.size()], max_N, min_N, step, amount - WorkPerThread * (amountOfThreads-1));
 
 
     for (auto &i : threads) {
         i.join();
     }
     rng.saveResults();
-
-
 }
 
-
+// compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs.tsv
+// Calculation is done parallel
+// input: max_N: max Number to test (min 100)
+//        step: multiplicative step width (min 2)
+//        amount: amount of tests per number (min 1)
+void compareRNGs_parallel(RNG_results &rng, unsigned long long max_N, unsigned int step, unsigned int amount) {
+    compareRNGs_parallel(rng, max_N, 10, step, amount);
+}

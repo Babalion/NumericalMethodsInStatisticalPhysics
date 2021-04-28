@@ -22,6 +22,18 @@ void RNG_results::saveResults() {
     }
 }
 
+//saves all elements to file with saveResults() and drops afterwards all vector-entries
+void RNG_results::saveAndClearResults() {
+    saveResults();
+    mutex_push_results.lock();
+    list_n.clear();
+    list_diff_LCG.clear();
+    list_diff_MT19937.clear();
+    list_time_ms_LCG.clear();
+    list_time_ms_MT19937.clear();
+    mutex_push_results.unlock();
+}
+
 void RNG_results::push_results(unsigned long long n, double diff_LCG, double diff_MT19937, double time_LCG, double time_MT19937) {
     std::lock_guard<std::mutex> guard(mutex_push_results);
     list_n.push_back(n);
@@ -40,4 +52,6 @@ RNG_results::RNG_results() {
 RNG_results::~RNG_results() {
     resultsFile.close();
 }
+
+
 

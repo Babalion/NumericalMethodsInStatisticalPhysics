@@ -5,8 +5,10 @@
 
 #include "RNG_results.h"
 
-// Starts the Project RngTests. Returns 0 if no error occurs.
+//startPoint for RNG-Tests Project. Returns 0 if no error occurs.
 int runRngTests();
+int interactiveMode();
+int endlessMode();
 
 class RNGs {
 public:
@@ -39,7 +41,16 @@ private:
 //        max_N: max Number to test (min 100)
 //        step: multiplicative step width (min 2)
 //        amount: amount of tests per number (min 1)
-void compareRNGs_seq(RNG_results &rng, RNGs &rGen, unsigned long long max_N, unsigned int step, unsigned int amount);
+void compareRNGs_seq_(RNG_results &rng, RNGs &rGen, unsigned long long max_N, unsigned int step, unsigned int amount);
+
+// compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs_seq.tsv
+// input: rng: a RNGResults class handling save results
+//        max_N: max Number to test (min 100)
+//        min_N: min Number to test (min 10)
+//        step: multiplicative step width (min 2)
+//        amount: amount of tests per number (min 1)
+void compareRNGs_seq(RNG_results &rng, RNGs &rGen, unsigned long long max_N,
+                     unsigned long long min_N, unsigned int step, unsigned int amount);
 
 // compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs_seq.tsv
 // Calculation is done parallel
@@ -47,3 +58,11 @@ void compareRNGs_seq(RNG_results &rng, RNGs &rGen, unsigned long long max_N, uns
 //        step: multiplicative step width (min 2)
 //        amount: amount of tests per number (min 1)
 void compareRNGs_parallel(RNG_results &rng, unsigned long long max_N, unsigned int step, unsigned int amount);
+
+// compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs.tsv
+// Calculation is done parallel
+// input: max_N: max Number to test (min 100)
+//        min_N: min Number to test (min 10)
+//        step: multiplicative step width (min 2)
+//        amount: amount of tests per number (min 1)
+void compareRNGs_parallel(RNG_results &rng, unsigned long long max_N,unsigned long long min_N, unsigned int step, unsigned int amount);
