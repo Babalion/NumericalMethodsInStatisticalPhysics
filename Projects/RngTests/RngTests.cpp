@@ -50,7 +50,7 @@ int endlessMode() {
     std::thread workerThread(
             [&]() {
                 while (!stopCommandEndless)
-                    compareRNGs_parallel(rng, 1E7, 1E6, 10, 100 * supportedThreads);
+                    compareRNGs_parallel(rng, 1E7, 1E6, 10, 50 * supportedThreads);
                 rng.saveAndClearResults();
             } // end of lambda expression
     );
