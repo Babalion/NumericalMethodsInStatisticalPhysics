@@ -7,25 +7,18 @@ void RNG_results::printResults() {
     std::lock_guard<std::mutex> guard(mutex_push_results);
 
     // Print the results
-    std::ofstream resultsFile;
-    resultsFile.open("compareRNGs.tsv");
-
     auto it1 = list_n.begin();
     auto it2 = list_diff_LCG.begin();
     auto it3 = list_time_ms_LCG.begin();
     auto it4 = list_diff_MT19937.begin();
     auto it5 = list_time_ms_MT19937.begin();
 
-    std::cout << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
-    resultsFile << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
     for (; it1 != list_n.end() && it2 != list_diff_LCG.end() && it3 != list_time_ms_LCG.end()
            && it4 != list_diff_MT19937.end() && it5 != list_time_ms_MT19937.end();
            ++it1, ++it2, ++it3, ++it4, ++it5) {
         std::cout << *it1 << "\t" << *it2 << "\t" << *it3 << "\t" << *it4 << "\t" << *it5 << std::endl;
         resultsFile << *it1 << "\t" << *it2 << "\t" << *it3 << "\t" << *it4 << "\t" << *it5 << std::endl;
     }
-
-    resultsFile.close();
 }
 
 void RNG_results::push_results(int n, double diff_LCG, double diff_MT19937, double time_LCG, double time_MT19937) {
@@ -36,3 +29,14 @@ void RNG_results::push_results(int n, double diff_LCG, double diff_MT19937, doub
     list_time_ms_LCG.push_back(time_LCG);
     list_time_ms_MT19937.push_back(time_MT19937);
 }
+
+RNG_results::RNG_results() {
+    resultsFile.open("compareRNGs.tsv");
+    std::cout << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
+    resultsFile << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
+}
+
+RNG_results::~RNG_results() {
+    resultsFile.close();
+}
+
