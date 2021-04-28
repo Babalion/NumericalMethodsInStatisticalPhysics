@@ -6,28 +6,11 @@
 
 int runRngTests() {
     std::cout << "This is RngTests." << std::endl;
-    compareRNGs(1E7,5,10);
+
+    RNG_results finalResults;
+    compareRNGs(finalResults,1E7, 10, 20);
+    finalResults.printResults();
     return 0;
-}
-
-double piTest(std::list<double> randomNumbers1, std::list<double> randomNumbers2) {
-    //check if lists have same dimension
-    if (randomNumbers1.size() != randomNumbers2.size()) {
-        std::cerr << "given Lists aren't same size!";
-        return -1;
-    }
-
-    int insideCircle = 0;
-
-    auto it1 = randomNumbers1.begin();
-    auto it2 = randomNumbers2.begin();
-    // TODO simplify this expression like mentioned here: https://youtu.be/SgcHcbQ0RCQ?t=526
-    for (; it1 != randomNumbers1.end() && it2 != randomNumbers2.end(); ++it1, ++it2) {
-        if (sqrt((*it1) * (*it1) + (*it2) * (*it2)) <= 1)
-            insideCircle++;
-    }
-
-    return abs(pi - 4.0 * insideCircle / randomNumbers1.size());
 }
 
 // a generator from <random>, here Linear congruential generator
@@ -35,23 +18,22 @@ double piTest(std::list<double> randomNumbers1, std::list<double> randomNumbers2
 double randomNumber_LCG() {
     // Making rng static ensures that it stays the same
     // Between different invocations of the function
-    static std::default_random_engine rng;
+    static std::linear_congruential_engine<uint_fast32_t, 16807UL, 0UL, 2147483647UL> rng;
 
     std::uniform_real_distribution<double> dist(0.0, 1.0);
+    //return rand()*1.0/RAND_MAX;
     return dist(rng);
 }
 
 // performs a pi-Test with Linear-Congruential-Method with a list of n 2-Tuples
 // this should not be the best due to small periodicity of LCG
 double piTest_LCG(unsigned int n) {
-    std::list<double> randLibList1;
-    std::list<double> randLibList2;
-
+    int insideCircle = 0;
     for (int i = 0; i < n; i++) {
-        randLibList1.push_back(randomNumber_LCG());
-        randLibList2.push_back(randomNumber_LCG());
+        if (sqrt(pow(randomNumber_LCG(), 2) + pow(randomNumber_LCG(), 2)) <= 1)
+            insideCircle++;
     }
-    return piTest(randLibList1, randLibList2);
+    return pi - 4.0 * insideCircle / n;
 }
 
 
@@ -78,67 +60,78 @@ double random_MT19937() {
 
 //performs a pi-Test with MT19937 with a list of n 2-Tuples
 double piTest_MT19937(unsigned int n) {
-    //----------------------------------------------------------------------------------------------------
-    //test c++ random library with Linear congruential generator
-    std::list<double> MT19937_List1;
-    std::list<double> MT19937_List2;
-
+    int insideCircle = 0;
     for (int i = 0; i < n; i++) {
-        MT19937_List1.push_back(random_MT19937());
-        MT19937_List2.push_back(random_MT19937());
+        if (sqrt(pow(random_MT19937(), 2) + pow(random_MT19937(), 2)) <= 1)
+            insideCircle++;
     }
-    return piTest(MT19937_List1, MT19937_List2);
+    return pi - 4.0 * insideCircle / n;
 }
 
+
+
+
+
 // compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs.tsv
-// input: max_N: max Number to test (min 100)
+// input: rng: a RNGResults class handling save results
+//        max_N: max Number to test (min 100)
 //        step: multiplicative step width (min 2)
 //        amount: amount of tests per number (min 1)
-void compareRNGs(unsigned int max_N, unsigned int step, unsigned int amount) {
-    std::list<int> n;
-    std::list<double> diff_LCG;
-    std::list<double> diff_MT19937;
-    std::list<double> time_ms_LCG;
-    std::list<double> time_ms_MT19937;
+void compareRNGs(RNG_results &rng, int max_N, int step, int amount) {
 
     for (int i = 10; i < max_N; i *= step) {
         for (int j = 0; j < amount; j++) {
-            std::cout << "Performing pi-Test with log10(n)=" << log10(i) << "....("<<j<<"/"<<amount<<")" << std::endl;
-            n.push_back(i);
+            std::cout << "Performing pi-Test with log10(n)=" << log10(i) << "....(" << j + 1 << "/" << amount << ")"
+                      << std::endl;
+
 
             std::chrono::steady_clock::time_point begin_LCG = std::chrono::steady_clock::now();
-            diff_LCG.push_back(piTest_LCG(i));
+            double diff_LCG = piTest_LCG(i);
             std::chrono::steady_clock::time_point end_LCG = std::chrono::steady_clock::now();
-            time_ms_LCG.push_back(std::chrono::duration_cast<std::chrono::microseconds>(end_LCG - begin_LCG).count());
+            double time_ms_LCG = std::chrono::duration_cast<std::chrono::microseconds>(end_LCG - begin_LCG).count();
 
 
             std::chrono::steady_clock::time_point begin_MT19937 = std::chrono::steady_clock::now();
-            diff_MT19937.push_back(piTest_MT19937(i));
+            double diff_MT19937 = piTest_MT19937(i);
             std::chrono::steady_clock::time_point end_MT19937 = std::chrono::steady_clock::now();
-            time_ms_MT19937.push_back(
-                    std::chrono::duration_cast<std::chrono::microseconds>(end_MT19937 - begin_MT19937).count());
+            double time_ms_MT19937 = std::chrono::duration_cast<std::chrono::microseconds>(
+                    end_MT19937 - begin_MT19937).count();
+            rng.push_results(i,diff_LCG,diff_MT19937,time_ms_LCG,time_ms_MT19937);
         }
     }
 
-    // Print the results
-    std::ofstream resultsFile;
-    resultsFile.open("compareRNGs.tsv");
-
-    auto it1 = n.begin();
-    auto it2 = diff_LCG.begin();
-    auto it3 = time_ms_LCG.begin();
-    auto it4 = diff_MT19937.begin();
-    auto it5 = time_ms_MT19937.begin();
-
-    std::cout << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
-    resultsFile << "n\tLCG-diff\tLCG-time-mus\tMT19937-diff\tMT19937-time-mus" << std::endl;
-    for (; it1 != n.end() && it2 != diff_LCG.end() && it3 != time_ms_LCG.end()
-           && it4 != diff_MT19937.end() && it5 != time_ms_MT19937.end();
-           ++it1, ++it2, ++it3, ++it4, ++it5) {
-        std::cout << *it1 << "\t" << *it2 << "\t" << *it3 << "\t" << *it4 << "\t" << *it5 << std::endl;
-        resultsFile << *it1 << "\t" << *it2 << "\t" << *it3 << "\t" << *it4 << "\t" << *it5 << std::endl;
-    }
-
-    resultsFile.close();
+    rng.printResults();
 
 }
+
+// compares the LCG and MT19937 random generators with a pi-test and prints the result to compareRNGs.tsv
+// Calculation is done parallel
+// input: max_N: max Number to test (min 100)
+//        step: multiplicative step width (min 2)
+//        amount: amount of tests per number (min 1)
+
+/*
+void compareRNGs_parallel(RNG_results &rng,unsigned int max_N, unsigned int step, unsigned int amount){
+    // Calculate amount of threads
+
+
+
+    std::vector<std::thread> threads(8);
+
+    for(int i=0; i<8;i++){
+        threads[i]=std::thread(compareRNGs,std::ref(rng),max_N,step,amount/8);
+    }
+
+    for (int i = 0; i < 8; ++i) {
+        threads[i].join();
+    }
+
+    std::chrono::steady_clock::time_point begin_LCG = std::chrono::steady_clock::now();
+    double diff_LCG = piTest_LCG(i);
+    std::chrono::steady_clock::time_point end_LCG = std::chrono::steady_clock::now();
+    double time_ms_LCG = std::chrono::duration_cast<std::chrono::microseconds>(end_LCG - begin_LCG).count();
+
+
+}
+*/
+
