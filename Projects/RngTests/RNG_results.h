@@ -20,10 +20,10 @@ public:
     RNG_results();
     ~RNG_results();
     std::mutex mutex_push_results;
-    void push_results(int n,double diff_LCG,double diff_MT19937,double time_LCG,double time_MT19937);
-    void printResults();
+    void push_results(unsigned long long,double diff_LCG,double diff_MT19937,double time_LCG,double time_MT19937);
+    void saveResults();
 private:
-    std::vector<int> list_n;
+    std::vector<unsigned long long> list_n;
     std::vector<double> list_diff_LCG;
     std::vector<double> list_diff_MT19937;
     std::vector<double> list_time_ms_LCG;

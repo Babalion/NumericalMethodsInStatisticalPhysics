@@ -4,7 +4,9 @@ project(NumerischeMethodenStatistischenPhysik)
 find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
 set(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+set(BUILD_ARCH "-m64")
 
 #add all .cpp files from the Projects. CONFIGURE_DEPENDS not recommended but useful:
 #https://cmake.org/cmake/help/latest/command/file.html#glob
