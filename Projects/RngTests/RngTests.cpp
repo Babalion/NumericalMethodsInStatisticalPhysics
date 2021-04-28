@@ -6,13 +6,16 @@
 
 int runRngTests() {
     std::cout << "This is RngTests." << std::endl;
+    unsigned long long maxN=1E6;
+    unsigned int amount=8;
+    std::cout<<"Until wich Number 10^X would you like to run? 1E4-1E10 are good values."<<std::endl;
+    std::cin>>maxN;
+    maxN=std::pow(10,maxN+1);
+    std::cout<<"How many values per Number should be generated? (1-100)"<<std::endl;
+    std::cin>>amount;
 
-    std::random_device rd;
-    for(int i=0;i<20;i++){
-        std::cout<<rd()<<std::endl;
-    }
     RNG_results finalResults;
-    compareRNGs_parallel(finalResults, 1E7, 10, 8);
+    compareRNGs_parallel(finalResults, maxN, 10, amount);
     finalResults.saveResults();
     return 0;
 }
@@ -24,9 +27,9 @@ double RNGs::randomNumber_LCG() {
     // Between different invocations of the function
     static std::linear_congruential_engine<uint_fast32_t, 16807UL, 0UL, 2147483647UL> rng;
 
-    //return dist(rd);
-    return rand() * 1.0 / RAND_MAX;
-    //return dist(rng);
+    //return dist(rd); //this is a physical hardware RNG
+    //return rand() * 1.0 / RAND_MAX; //this is one of the worst RNGs
+    return dist(rng);
 }
 
 // performs a pi-Test with Linear-Congruential-Method with a list of n 2-Tuples
