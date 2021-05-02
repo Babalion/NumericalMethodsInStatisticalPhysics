@@ -1,16 +1,19 @@
-# Projekte zur Vorlesung Numerische Methoden der Statistischen Physik
-Die hier verwendete Programmiersprache ist C++20. Die IDE ist CLion.
+# Projects for the lecture Numerical Methods of Statistical Pyhsics
+The lecture was held by Markus Quandt and Giuseppe Burgio in summersemester 2020 at University of Tuebingen.
 
-## Voraussetzungen, die installiert sein müssen:
+The used language for simulations is C++20. The IDE is CLion.
+
+## Installation requirements
 1. CMake https://cmake.org/install/
 2. Armadillo http://arma.sourceforge.net/download.html
-3. Matplotlib-cpp from https://github.com/lava/matplotlib-cpp
+eventually in further releases:
+  Matplotlib-cpp from https://github.com/lava/matplotlib-cpp
 
 
-## Wie starten?
+## How to compile?
 
 ## Tests
-Unit-Tests werden mit CTest durchgeführt.
-Dazu gibt es für jedes Projekt eine cpp Datei mit der Benennung: `test{projectName}.cpp` im Ordner `test/ctest`
+Unit-Tests are performed with CTest.
+Therefore every projekt has its own cpp-File with the nomenclature: `test{projectName}.cpp` in folder `test/ctest`
 
 
