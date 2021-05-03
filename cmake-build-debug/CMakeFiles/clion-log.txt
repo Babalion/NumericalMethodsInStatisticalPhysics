@@ -1,0 +1,4 @@
+/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug

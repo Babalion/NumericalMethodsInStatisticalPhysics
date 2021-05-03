@@ -1,0 +1,1 @@
+/usr/bin/c++   -pthread -g   CMakeFiles/ctest_exe_testHelloWorld.dir/testHelloWorld.cpp.o CMakeFiles/ctest_exe_testHelloWorld.dir/__/__/Projects/HelloWorld/HelloWorld.cpp.o  -o ctest_exe_testHelloWorld 

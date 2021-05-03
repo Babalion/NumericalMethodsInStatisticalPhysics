@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/test/ctest/addvalues_zero.cpp
+assert_macro.h
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/test/ctest/assert_macro.h
+
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/test/ctest/assert_macro.h
+iostream
+-
+sstream
+-
+

@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/HelloWorld/HelloWorld.cpp
+iostream
+-
+HelloWorld.h
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/HelloWorld/HelloWorld.h
+
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/HelloWorld/HelloWorld.h
+
