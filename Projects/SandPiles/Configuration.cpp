@@ -170,7 +170,7 @@ void Configuration::printFig() {
 
 #include <string>
 
-void Configuration::animate(unsigned int timeSteps) {
+void Configuration::animate(unsigned int timeSteps, int offsetFileName) {
     std::vector<std::vector<double>> x, y, z;
     for (int t = 0; t < timeSteps; ++t) {
         for (int i = 0; i < fieldWidth; i++) {
@@ -184,13 +184,15 @@ void Configuration::animate(unsigned int timeSteps) {
             y.push_back(y_row);
             z.push_back(z_row);
         }
+        //TODO do it like in example of matplotlib colorBar
         //plt::scatter(x,y,z);
         plt::contour(x, y, z);
-        plt::title("Sandpiles t=" + std::to_string(t));
+        plt::title("Sandpiles t=" + std::to_string(t+offsetFileName));
         //plt::pause(1);
         std::string s =
-                "./sandPiles/sandPiles" + std::string(5 - std::to_string(t).length(), '0') + std::to_string(t) + ".png";
-        std::cout <<"saved "<< s << std::endl;
+                "./sandPiles/sandPiles" + std::string(5 - std::to_string(t + offsetFileName).length(), '0') +
+                std::to_string(t + offsetFileName) + ".png";
+        std::cout << "saved " << s << std::endl;
         plt::save(s);
         plt::close();
         x.clear();
@@ -202,8 +204,13 @@ void Configuration::animate(unsigned int timeSteps) {
 
 void Configuration::addSand() {
     //we add a corn of sand in the middle of the cells field
-    cells[(fieldWidth-1)*(fieldWidth-1)/2].incHeight();
+    cells[(fieldWidth - 1) * (fieldWidth - 1) / 2+fieldWidth/2].incHeight();
     updateSlopes();
+}
+
+//starts at 0 to count
+void Configuration::animate(unsigned int timeSteps) {
+    animate(timeSteps,0);
 }
 
 

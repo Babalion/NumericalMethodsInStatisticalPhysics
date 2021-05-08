@@ -21,6 +21,8 @@ public:
     //creates a Configuration with a given cells-vector
     Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope);
 
+    void animate(unsigned int timeSteps,int offsetFileName);
+    void runTime();
     void animate(unsigned int timeSteps);
 
     void addSand();
@@ -34,7 +36,6 @@ public:
 private:
     void initRandom();
     void updateSlopes();
-    void runTime();
     unsigned int fieldWidth;
     unsigned int criticalSlope;
     std::vector<Cell> cells;
