@@ -10,7 +10,7 @@ int main() {
     for (int i = 0; i < 100; ++i) {
         cells.emplace_back(0);
     }*/
-    Configuration conf(100, 6);
+    Configuration conf(100, 4);
     for (int i = 0; i < 100; ++i) {
         if (i % 5 == 0) {
             conf.animate(1, i);
