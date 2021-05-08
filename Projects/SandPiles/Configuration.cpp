@@ -7,6 +7,7 @@
 Configuration::Configuration(unsigned int fieldWidth, unsigned int criticalSlope) :
         criticalSlope(criticalSlope), fieldWidth(fieldWidth), rng(RNG_MT19937(0, 50)) {
     cells = std::vector<Cell>(fieldWidth * fieldWidth);
+    initRandom();
 }
 
 Configuration::Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope) :
@@ -186,12 +187,10 @@ void Configuration::animate(unsigned int timeSteps) {
         //plt::scatter(x,y,z);
         plt::contour(x, y, z);
         plt::title("Sandpiles t=" + std::to_string(t));
-        // Enable legend.
-        plt::legend();
         //plt::pause(1);
         std::string s =
-                "./sandPiles/sandPiles" + std::string(3 - std::to_string(t).length(), '0') + std::to_string(t) + ".png";
-        std::cout << s << std::endl;
+                "./sandPiles/sandPiles" + std::string(5 - std::to_string(t).length(), '0') + std::to_string(t) + ".png";
+        std::cout <<"saved "<< s << std::endl;
         plt::save(s);
         plt::close();
         x.clear();

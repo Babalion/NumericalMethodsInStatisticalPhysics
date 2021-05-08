@@ -5,9 +5,9 @@
 #include "Configuration.h"
 
 int main() {
-    Configuration conf(10, 4);
-    conf.initRandom();
-    conf.animate(50);
+    Configuration conf(100, 6);
+
+    conf.animate(500);
     //for(int i=0;i<10;i++){
     //   conf.printFig();
     //  conf.runTime();
