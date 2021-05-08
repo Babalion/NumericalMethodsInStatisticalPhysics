@@ -42,14 +42,15 @@ int testH_V_Slopes_CornerCases() {
     return err_code;
 }
 
-int testPrintFig() {
+void testPrintFig() {
     std::vector<Cell> cells({Cell(1), Cell(1),
                              Cell(0), Cell(0)});
-    Configuration conf = Configuration(cells, 10);
-    conf.printFig();
-    int k=0;
-    k++;
-    return k;
+    Configuration conf = Configuration(20, 10);
+    conf.initRandom();
+    for(int k=0;k<10;k++){
+        conf.runTime();
+        conf.printFig();
+    }
 }
 
 

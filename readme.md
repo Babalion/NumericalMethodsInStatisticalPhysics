@@ -36,3 +36,4 @@ With this RNG it is not possible to determine pi more exactly than to 1E-2.
 ## Sand Piles
 Main idea from https://www.hiskp.uni-bonn.de/uploads/media/sandpiles.pdf
 
+`ffmpeg -framerate 3 -pattern_type glob -i '*.png' out.mp4` generates a `.mp4` from all `.png` files in the folder.

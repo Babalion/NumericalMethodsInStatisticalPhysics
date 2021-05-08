@@ -117,7 +117,8 @@ void Configuration::runTime() {
 }
 
 
-namespace plt=matplotlibcpp;
+namespace plt = matplotlibcpp;
+
 void Configuration::printFig() {
     /*
     int n = 1000;
@@ -150,7 +151,7 @@ void Configuration::printFig() {
 */
     //TODO optimize with call by reference
     std::vector<std::vector<double>> x, y, z;
-    for (int i=0; i < fieldWidth; i++) {
+    for (int i = 0; i < fieldWidth; i++) {
         std::vector<double> x_row, y_row, z_row;
         for (int j = 0; j < fieldWidth; j++) {
             x_row.push_back(i);
@@ -165,5 +166,47 @@ void Configuration::printFig() {
     plt::plot_surface(x, y, z);
     plt::show();
 }
+
+#include <string>
+
+void Configuration::animate(unsigned int timeSteps) {
+    std::vector<std::vector<double>> x, y, z;
+    for (int t = 0; t < timeSteps; ++t) {
+        for (int i = 0; i < fieldWidth; i++) {
+            std::vector<double> x_row, y_row, z_row;
+            for (int j = 0; j < fieldWidth; j++) {
+                x_row.push_back(i);
+                y_row.push_back(j);
+                z_row.push_back(cells[i * fieldWidth + j].getHeight());
+            }
+            x.push_back(x_row);
+            y.push_back(y_row);
+            z.push_back(z_row);
+        }
+        //plt::scatter(x,y,z);
+        plt::contour(x, y, z);
+        plt::title("Sandpiles t=" + std::to_string(t));
+        // Enable legend.
+        plt::legend();
+        //plt::pause(1);
+        std::string s =
+                "./sandPiles/sandPiles" + std::string(3 - std::to_string(t).length(), '0') + std::to_string(t) + ".png";
+        std::cout << s << std::endl;
+        plt::save(s);
+        plt::close();
+        x.clear();
+        y.clear();
+        z.clear();
+        runTime();
+    }
+}
+
+void Configuration::addSand() {
+    //we add a corn of sand in the middle of the cells field
+    cells[(fieldWidth-1)*(fieldWidth-1)/2].incHeight();
+    updateSlopes();
+}
+
+
 
 

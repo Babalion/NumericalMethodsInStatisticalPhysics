@@ -16,18 +16,14 @@
 class Configuration {
 public:
     //field width should be bigger or equal than 2
+    // initialization is random between 0 and 20
     Configuration(unsigned int fieldWidth, unsigned int criticalSlope);
     //creates a Configuration with a given cells-vector
     Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope);
 
-    void initRandom();
-    void updateSlopes();
+    void animate(unsigned int timeSteps);
 
-    void runTime();
-
-    void doConservativePerturbation();
-
-    void doNonConservativePerturbation();
+    void addSand();
 
     void plot();
     void printFig();
@@ -36,6 +32,9 @@ public:
     [[nodiscard]] unsigned int getFieldWidth() const;
 
 private:
+    void initRandom();
+    void updateSlopes();
+    void runTime();
     unsigned int fieldWidth;
     unsigned int criticalSlope;
     std::vector<Cell> cells;

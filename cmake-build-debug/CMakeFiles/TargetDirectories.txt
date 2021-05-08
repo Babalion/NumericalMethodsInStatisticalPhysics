@@ -2,9 +2,10 @@
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/install/local.dir
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/install.dir
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/list_install_components.dir
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/rebuild_cache.dir
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/NumerischeMethodenStatistischenPhysik.dir
-/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/SandPiles.dir
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/CMakeFiles/test.dir
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/test/ctest/CMakeFiles/install/strip.dir
 /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/test/ctest/CMakeFiles/install/local.dir

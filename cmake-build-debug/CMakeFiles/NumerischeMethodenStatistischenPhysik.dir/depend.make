@@ -4,6 +4,9 @@
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: ../Projects/HelloWorld/HelloWorld.cpp
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: ../Projects/HelloWorld/HelloWorld.h
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: ../Projects/HelloWorld/test.h
+CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: ../Projects/SandPiles/Cell.h
+CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: ../Projects/SandPiles/Configuration.h
+CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: ../Projects/SandPiles/RNG_MT19937.h
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: ../lib/matplotlibcpp.h
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: /usr/include/python3.7m/Python.h
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/Projects/HelloWorld/HelloWorld.cpp.o: /usr/include/python3.7m/abstract.h

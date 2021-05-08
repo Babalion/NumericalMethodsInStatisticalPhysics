@@ -2,12 +2,17 @@
 // Created by chris on 05.05.21.
 //
 
-#include "SandPiles.h"
+#include "Configuration.h"
 
-void runSandPiles() {
-    Configuration conf(4,4);
+int main() {
+    Configuration conf(10, 4);
     conf.initRandom();
-    conf.plot();
-    //conf.plot();
+    conf.animate(50);
+    //for(int i=0;i<10;i++){
+    //   conf.printFig();
+    //  conf.runTime();
+    //}
+
+
 
 }
