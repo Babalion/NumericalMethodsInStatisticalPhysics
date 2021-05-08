@@ -6,8 +6,9 @@
 #define NUMERISCHEMETHODENSTATISTISCHENPHYSIK_CONFIGURATION_H
 
 #include <vector>
+#include <algorithm>
+#include <cmath>
 #include "Cell.h"
-#include "Slope_Cell.h"
 #include "../../lib/matplotlibcpp.h"
 #include "RNG_MT19937.h"
 
@@ -20,6 +21,7 @@ public:
     Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope);
 
     void initRandom();
+    void updateSlopes();
 
     void runTime();
 
@@ -30,34 +32,12 @@ public:
     void plot();
 
     [[nodiscard]] const std::vector<Cell> &getCells() const;
-
-    [[nodiscard]]const std::vector<Slope_Cell> &getVSlopes() const;
-
-    [[nodiscard]]const std::vector<Slope_Cell> &getHSlopes() const;
-
-    [[nodiscard]]const std::vector<Slope_Cell> &getLocSlopes() const;
+    [[nodiscard]] unsigned int getFieldWidth() const;
 
 private:
     unsigned int fieldWidth;
-public:
-    unsigned int getFieldWidth() const;
-
-private:
     unsigned int criticalSlope;
     std::vector<Cell> cells;
-
-    std::vector<Slope_Cell> vSlopes;
-
-    void updateVSlopes();
-
-    std::vector<Slope_Cell> hSlopes;
-
-    void updateHSlopes();
-
-    std::vector<Slope_Cell> locSlopes;
-
-    void updateLocSlopes();
-
     RNG_MT19937 rng;
 };
 

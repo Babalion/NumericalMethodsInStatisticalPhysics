@@ -7,19 +7,14 @@
 Configuration::Configuration(unsigned int fieldWidth, unsigned int criticalSlope) :
         criticalSlope(criticalSlope), fieldWidth(fieldWidth), rng(RNG_MT19937(0, 50)) {
     cells = std::vector<Cell>(fieldWidth * fieldWidth);
-    hSlopes = std::vector<Slope_Cell>(fieldWidth * (fieldWidth - 1));
-    vSlopes = std::vector<Slope_Cell>(fieldWidth * (fieldWidth - 1));
-    locSlopes = std::vector<Slope_Cell>((fieldWidth - 1) * (fieldWidth - 1));
 }
 
 Configuration::Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope) :
         criticalSlope(criticalSlope), rng(RNG_MT19937(0, 50)) {
     fieldWidth = sqrt(cells_.size());
     cells = cells_;
-    hSlopes = std::vector<Slope_Cell>(fieldWidth * (fieldWidth - 1));
-    vSlopes = std::vector<Slope_Cell>(fieldWidth * (fieldWidth - 1));
-    locSlopes = std::vector<Slope_Cell>((fieldWidth - 1) * (fieldWidth - 1));
-    updateLocSlopes();
+    updateSlopes();
+
 }
 
 //initializes cells and slope-cells
@@ -30,42 +25,7 @@ void Configuration::initRandom() {
     for (auto &cell : cells) {
         cell.setHeight(rng.getRandom());
     }
-    updateLocSlopes();
-}
-
-void Configuration::updateVSlopes() {
-    // calculate now vertical slopes
-    for (int row = 0; row < fieldWidth; ++row) {
-        for (int col = 0; col < fieldWidth - 1; ++col) {
-            int v_index = row * (fieldWidth - 1) + col;
-            int setSlope = cells[row * fieldWidth + col + 1].getHeight() - cells[row * fieldWidth + col].getHeight();
-            vSlopes[v_index].setSlope(setSlope);
-        }
-    }
-}
-
-void Configuration::updateHSlopes() {
-    // calculate now horizontal slopes
-    for (int row = 0; row < fieldWidth - 1; ++row) {
-        for (int col = 0; col < fieldWidth; ++col) {
-            int h_index = row * fieldWidth + col;
-            int setSlope = cells[(row+1) * fieldWidth + col].getHeight() - cells[row * fieldWidth + col].getHeight();
-            hSlopes[h_index].setSlope(setSlope);
-        }
-    }
-}
-
-void Configuration::updateLocSlopes() {
-    updateVSlopes();
-    updateHSlopes();
-    for (int row = 0; row < fieldWidth - 1; ++row) {
-        for (int col = 0; col < fieldWidth-1; ++col) {
-            int loc_index = row * (fieldWidth-1) + col;
-            int setLocalSlope = hSlopes[loc_index+(fieldWidth-1)].getSlope() - hSlopes[loc_index].getSlope()
-                    +vSlopes[loc_index].getSlope()-vSlopes[loc_index-1].getSlope();
-            locSlopes[loc_index].setSlope(setLocalSlope);
-        }
-    }
+    updateSlopes();
 }
 
 #include <iostream>
@@ -73,63 +33,87 @@ void Configuration::updateLocSlopes() {
 void Configuration::plot() {
     // output cells
     std::cout << "Cells:" << std::endl;
-    for (int row = 0; row < fieldWidth; ++row) {
-        for (int col = 0; col < fieldWidth - 1; ++col) {
-            std::cout << cells[row * fieldWidth + col].getHeight() << " ";
-        }
-        std::cout << cells[row * fieldWidth + fieldWidth - 1].getHeight() << std::endl;
-    }
-    //output vSlopes
-    std::cout << "vSlopes:" << std::endl;
-    for (int i = 0; i < vSlopes.size(); ++i) {
-        std::cout << vSlopes[i].getSlope();
-        if ((i + 1) % (fieldWidth - 1) == 0 && i > 0) {
-            std::cout << std::endl;
-        } else {
-            std::cout << "\t";
-        }
-    }
-    //output hSlopes
-    std::cout << "hSlopes:" << std::endl;
-    for (int i = 0; i < hSlopes.size(); ++i) {
-        std::cout << hSlopes[i].getSlope();
+    for (int i = 0; i < cells.size(); ++i) {
+        std::cout << cells[i].getHeight();
         if ((i + 1) % fieldWidth == 0 && i > 0) {
             std::cout << std::endl;
         } else {
             std::cout << "\t";
         }
     }
-    //output locSlopes
-    std::cout << "locSlopes:" << std::endl;
-    for (int i = 0; i < locSlopes.size(); ++i) {
-        std::cout << locSlopes[i].getSlope();
-        if ((i + 1) % (fieldWidth-1) == 0 && i > 0) {
+    std::cout << "Cells slope:" << std::endl;
+    for (int i = 0; i < cells.size(); ++i) {
+        std::cout << cells[i].getSlopeToNeighbours();
+        if ((i + 1) % fieldWidth == 0 && i > 0) {
             std::cout << std::endl;
         } else {
             std::cout << "\t";
         }
     }
-
 }
 
 const std::vector<Cell> &Configuration::getCells() const {
     return cells;
 }
 
-const std::vector<Slope_Cell> &Configuration::getVSlopes() const {
-    return vSlopes;
-}
-
-const std::vector<Slope_Cell> &Configuration::getHSlopes() const {
-    return hSlopes;
-}
-
-const std::vector<Slope_Cell> &Configuration::getLocSlopes() const {
-    return locSlopes;
-}
-
 unsigned int Configuration::getFieldWidth() const {
     return fieldWidth;
+}
+
+//calculates the cell-slope based on the cell height of each neighbours
+void Configuration::updateSlopes() {
+    for (int i = 0; i < cells.size(); ++i) {
+        //TODO refactoring
+
+        int maxSlope = 0; //TODO the minimal slope is now 0 - Problem?
+        if ((i % fieldWidth) == 0) {//left boundary
+        } else {
+            maxSlope = std::max(maxSlope,
+                                (int) cells[i].getHeight() - (int) cells[i - 1].getHeight());
+        }
+        if ((i % fieldWidth) == (fieldWidth - 1)) {//right boundary
+        } else {
+            maxSlope = std::max(maxSlope,
+                                (int) cells[i].getHeight() - (int) cells[i + 1].getHeight());
+        }
+        if (i < fieldWidth) {//top boundary
+        } else {
+            maxSlope = std::max(maxSlope,
+                                (int) cells[i].getHeight() - (int) cells[i - fieldWidth].getHeight());
+        }
+        if (i >= (fieldWidth * (fieldWidth - 1))) {//bottom boundary
+        } else {
+            maxSlope = std::max(maxSlope,
+                                (int) cells[i].getHeight() - (int) cells[i + fieldWidth].getHeight());
+        }
+        cells[i].setSlopeToNeighbours(maxSlope);
+    }
+
+}
+
+void Configuration::runTime() {
+    //reduce critical cells by 4 and increase neighbour cells by 1
+    for (int i = 0; i < cells.size(); ++i) {
+        if (cells[i].getSlopeToNeighbours() >= criticalSlope) {
+            cells[i].setHeight(cells[i].getHeight() - 4);
+
+            //increase neighbour cells by 1
+            if ((i % fieldWidth) != 0) {//not at left boundary
+                cells[i - 1].incHeight();
+            }
+            if ((i % fieldWidth) != (fieldWidth - 1)) {//not at right boundary
+                cells[i + 1].incHeight();
+            }
+            if (i >= fieldWidth) {//not at top boundary
+                cells[i - fieldWidth].incHeight();
+            }
+            if (i < (fieldWidth * (fieldWidth - 1))) {//not at bottom boundary
+                cells[i + fieldWidth].incHeight();
+            }
+        }
+    }
+    // update the slopes now
+    updateSlopes();
 }
 
 
