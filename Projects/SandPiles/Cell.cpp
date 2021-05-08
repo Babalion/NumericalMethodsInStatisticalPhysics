@@ -13,7 +13,7 @@ void Cell::setHeight(unsigned int height_) {
     slopeToNeighbours=0;
 }
 
-Cell::Cell(unsigned int height):height(height) {
+Cell::Cell(unsigned int height):height(height),slopeToNeighbours(0) {
 
 }
 

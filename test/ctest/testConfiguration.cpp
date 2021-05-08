@@ -24,8 +24,9 @@ int testH_V_Slopes() {
                                       Cell(1), Cell(4), Cell(8)});
 
     conf.runTime();
-    assertEqual (conf.getCells() == cell_after1Run);
+    assertEqual (conf.getCells() == cell_after1Run); //doesnt work bec Slope doesn't match
     conf.plot();
+    conf.printFig();
     return err_code;
 }
 
@@ -41,10 +42,21 @@ int testH_V_Slopes_CornerCases() {
     return err_code;
 }
 
+int testPrintFig() {
+    std::vector<Cell> cells({Cell(1), Cell(1),
+                             Cell(0), Cell(0)});
+    Configuration conf = Configuration(cells, 10);
+    conf.printFig();
+    int k=0;
+    k++;
+    return k;
+}
+
 
 int main() {
     int err_code = 0;
     err_code += testH_V_Slopes_CornerCases();
     err_code += testH_V_Slopes();
+    testPrintFig();
     return err_code;
 }

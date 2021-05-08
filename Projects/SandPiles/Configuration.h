@@ -30,6 +30,7 @@ public:
     void doNonConservativePerturbation();
 
     void plot();
+    void printFig();
 
     [[nodiscard]] const std::vector<Cell> &getCells() const;
     [[nodiscard]] unsigned int getFieldWidth() const;
@@ -39,6 +40,7 @@ private:
     unsigned int criticalSlope;
     std::vector<Cell> cells;
     RNG_MT19937 rng;
+    std::vector<int> cellHeightToArray();
 };
 
 

@@ -69,22 +69,22 @@ void Configuration::updateSlopes() {
         if ((i % fieldWidth) == 0) {//left boundary
         } else {
             maxSlope = std::max(maxSlope,
-                                (int) cells[i].getHeight() - (int) cells[i - 1].getHeight());
+                                static_cast<int>(cells[i].getHeight()) - (int) cells[i - 1].getHeight());
         }
         if ((i % fieldWidth) == (fieldWidth - 1)) {//right boundary
         } else {
             maxSlope = std::max(maxSlope,
-                                (int) cells[i].getHeight() - (int) cells[i + 1].getHeight());
+                                static_cast<int>(cells[i].getHeight()) - (int) cells[i + 1].getHeight());
         }
         if (i < fieldWidth) {//top boundary
         } else {
             maxSlope = std::max(maxSlope,
-                                (int) cells[i].getHeight() - (int) cells[i - fieldWidth].getHeight());
+                                static_cast<int>(cells[i].getHeight()) - (int) cells[i - fieldWidth].getHeight());
         }
         if (i >= (fieldWidth * (fieldWidth - 1))) {//bottom boundary
         } else {
             maxSlope = std::max(maxSlope,
-                                (int) cells[i].getHeight() - (int) cells[i + fieldWidth].getHeight());
+                                static_cast<int>(cells[i].getHeight()) - (int) cells[i + fieldWidth].getHeight());
         }
         cells[i].setSlopeToNeighbours(maxSlope);
     }
@@ -114,6 +114,56 @@ void Configuration::runTime() {
     }
     // update the slopes now
     updateSlopes();
+}
+
+
+namespace plt=matplotlibcpp;
+void Configuration::printFig() {
+    /*
+    int n = 1000;
+    std::vector<double> x, y, z;
+
+    for(int i=0; i<n; i++) {
+        x.push_back(i*i);
+        y.push_back(sin(2*M_PI*i/360.0));
+        z.push_back(log(i));
+
+        if (i % 10 == 0) {
+            // Clear previous plot
+            plt::clf();
+            // Plot line from given x and y data. Color is selected automatically.
+            plt::plot(x, y);
+            // Plot a line whose name will show up as "log(x)" in the legend.
+            plt::named_plot("log(x)", x, z);
+
+            // Set x-axis to interval [0,1000000]
+            plt::xlim(0, n*n);
+
+            // Add graph title
+            plt::title("Sample figure");
+            // Enable legend.
+            plt::legend();
+            // Display plot continuously
+            plt::pause(0.01);
+        }
+    }
+*/
+    //TODO optimize with call by reference
+    std::vector<std::vector<double>> x, y, z;
+    for (int i=0; i < fieldWidth; i++) {
+        std::vector<double> x_row, y_row, z_row;
+        for (int j = 0; j < fieldWidth; j++) {
+            x_row.push_back(i);
+            y_row.push_back(j);
+            z_row.push_back(cells[i * fieldWidth + j].getHeight());
+        }
+        x.push_back(x_row);
+        y.push_back(y_row);
+        z.push_back(z_row);
+    }
+    //plt::scatter(x,y,z);
+    plt::plot_surface(x, y, z);
+    plt::show();
 }
 
 
