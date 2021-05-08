@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Projects/HelloWorld/HelloWorld.h"
 #include "Projects/RngTests/RngTests.h"
+#include "Projects/SandPiles/SandPiles.h"
 
 int main() {
     //TODO insert non-interaction/automatic mode and let user choose between interactive or non-
@@ -12,6 +13,7 @@ int main() {
     <<"Programm beenden (0)"<<std::endl
     <<"Hello World (1)"<<std::endl
     <<"rngTests (2)"<<std::endl
+    <<"SandPiles (3)"<<std::endl
     <<"Projektnummer: ";
 
     uint chooseProgram;
@@ -25,6 +27,8 @@ int main() {
             case 2:
                 runRngTests();
                 break;
+            case 3:
+                runSandPiles();
             default:
                 break;
         }

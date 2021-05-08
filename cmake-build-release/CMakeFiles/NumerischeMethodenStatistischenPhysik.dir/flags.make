@@ -6,5 +6,5 @@ CXX_FLAGS =  -pthread -O3 -DNDEBUG   -std=gnu++2a
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/examples -isystem /usr/include/python3.7m -isystem /usr/lib/python3/dist-packages/numpy/core/include 
 

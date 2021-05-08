@@ -33,3 +33,6 @@ The maximum period of random numbers of MT19937 is pow(2,19937)-1, so this would
 The linear congruential RNG (LCG) is limited in randomness and periodicity wich results in limited convergence.
 With this RNG it is not possible to determine pi more exactly than to 1E-2.
 
+## Sand Piles
+Main idea from https://www.hiskp.uni-bonn.de/uploads/media/sandpiles.pdf
+

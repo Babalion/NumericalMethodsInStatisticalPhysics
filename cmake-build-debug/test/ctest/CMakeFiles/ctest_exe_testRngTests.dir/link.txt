@@ -1,1 +1,1 @@
-/usr/bin/c++   -pthread -g   CMakeFiles/ctest_exe_testRngTests.dir/testRngTests.cpp.o CMakeFiles/ctest_exe_testRngTests.dir/__/__/Projects/RngTests/RngTests.cpp.o  -o ctest_exe_testRngTests 
+/usr/bin/c++   -pthread -pthread -g   CMakeFiles/ctest_exe_testRngTests.dir/testRngTests.cpp.o CMakeFiles/ctest_exe_testRngTests.dir/__/__/Projects/RngTests/RngTests.cpp.o  -o ctest_exe_testRngTests 

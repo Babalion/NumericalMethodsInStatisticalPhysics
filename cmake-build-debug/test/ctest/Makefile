@@ -76,6 +76,52 @@ CMAKE_BINARY_DIR = /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenP
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Only default component available"
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -87,17 +133,6 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -108,6 +143,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -172,6 +218,21 @@ ctest_exe_testRngTests/fast:
 	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/build.make test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/build
 .PHONY : ctest_exe_testRngTests/fast
 
+# Convenience name for target.
+test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/rule:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/rule
+.PHONY : test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/rule
+
+# Convenience name for target.
+ctest_exe_testConfiguration: test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/rule
+
+.PHONY : ctest_exe_testConfiguration
+
+# fast build rule for target.
+ctest_exe_testConfiguration/fast:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build
+.PHONY : ctest_exe_testConfiguration/fast
+
 __/__/Projects/HelloWorld/HelloWorld.o: __/__/Projects/HelloWorld/HelloWorld.cpp.o
 
 .PHONY : __/__/Projects/HelloWorld/HelloWorld.o
@@ -225,6 +286,141 @@ __/__/Projects/RngTests/RngTests.s: __/__/Projects/RngTests/RngTests.cpp.s
 __/__/Projects/RngTests/RngTests.cpp.s:
 	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/build.make test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/__/__/Projects/RngTests/RngTests.cpp.s
 .PHONY : __/__/Projects/RngTests/RngTests.cpp.s
+
+__/__/Projects/SandPiles/Cell.o: __/__/Projects/SandPiles/Cell.cpp.o
+
+.PHONY : __/__/Projects/SandPiles/Cell.o
+
+# target to build an object file
+__/__/Projects/SandPiles/Cell.cpp.o:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Cell.cpp.o
+.PHONY : __/__/Projects/SandPiles/Cell.cpp.o
+
+__/__/Projects/SandPiles/Cell.i: __/__/Projects/SandPiles/Cell.cpp.i
+
+.PHONY : __/__/Projects/SandPiles/Cell.i
+
+# target to preprocess a source file
+__/__/Projects/SandPiles/Cell.cpp.i:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Cell.cpp.i
+.PHONY : __/__/Projects/SandPiles/Cell.cpp.i
+
+__/__/Projects/SandPiles/Cell.s: __/__/Projects/SandPiles/Cell.cpp.s
+
+.PHONY : __/__/Projects/SandPiles/Cell.s
+
+# target to generate assembly for a file
+__/__/Projects/SandPiles/Cell.cpp.s:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Cell.cpp.s
+.PHONY : __/__/Projects/SandPiles/Cell.cpp.s
+
+__/__/Projects/SandPiles/Configuration.o: __/__/Projects/SandPiles/Configuration.cpp.o
+
+.PHONY : __/__/Projects/SandPiles/Configuration.o
+
+# target to build an object file
+__/__/Projects/SandPiles/Configuration.cpp.o:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Configuration.cpp.o
+.PHONY : __/__/Projects/SandPiles/Configuration.cpp.o
+
+__/__/Projects/SandPiles/Configuration.i: __/__/Projects/SandPiles/Configuration.cpp.i
+
+.PHONY : __/__/Projects/SandPiles/Configuration.i
+
+# target to preprocess a source file
+__/__/Projects/SandPiles/Configuration.cpp.i:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Configuration.cpp.i
+.PHONY : __/__/Projects/SandPiles/Configuration.cpp.i
+
+__/__/Projects/SandPiles/Configuration.s: __/__/Projects/SandPiles/Configuration.cpp.s
+
+.PHONY : __/__/Projects/SandPiles/Configuration.s
+
+# target to generate assembly for a file
+__/__/Projects/SandPiles/Configuration.cpp.s:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Configuration.cpp.s
+.PHONY : __/__/Projects/SandPiles/Configuration.cpp.s
+
+__/__/Projects/SandPiles/RNG_MT19937.o: __/__/Projects/SandPiles/RNG_MT19937.cpp.o
+
+.PHONY : __/__/Projects/SandPiles/RNG_MT19937.o
+
+# target to build an object file
+__/__/Projects/SandPiles/RNG_MT19937.cpp.o:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/RNG_MT19937.cpp.o
+.PHONY : __/__/Projects/SandPiles/RNG_MT19937.cpp.o
+
+__/__/Projects/SandPiles/RNG_MT19937.i: __/__/Projects/SandPiles/RNG_MT19937.cpp.i
+
+.PHONY : __/__/Projects/SandPiles/RNG_MT19937.i
+
+# target to preprocess a source file
+__/__/Projects/SandPiles/RNG_MT19937.cpp.i:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/RNG_MT19937.cpp.i
+.PHONY : __/__/Projects/SandPiles/RNG_MT19937.cpp.i
+
+__/__/Projects/SandPiles/RNG_MT19937.s: __/__/Projects/SandPiles/RNG_MT19937.cpp.s
+
+.PHONY : __/__/Projects/SandPiles/RNG_MT19937.s
+
+# target to generate assembly for a file
+__/__/Projects/SandPiles/RNG_MT19937.cpp.s:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/RNG_MT19937.cpp.s
+.PHONY : __/__/Projects/SandPiles/RNG_MT19937.cpp.s
+
+__/__/Projects/SandPiles/Slope_Cell.o: __/__/Projects/SandPiles/Slope_Cell.cpp.o
+
+.PHONY : __/__/Projects/SandPiles/Slope_Cell.o
+
+# target to build an object file
+__/__/Projects/SandPiles/Slope_Cell.cpp.o:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Slope_Cell.cpp.o
+.PHONY : __/__/Projects/SandPiles/Slope_Cell.cpp.o
+
+__/__/Projects/SandPiles/Slope_Cell.i: __/__/Projects/SandPiles/Slope_Cell.cpp.i
+
+.PHONY : __/__/Projects/SandPiles/Slope_Cell.i
+
+# target to preprocess a source file
+__/__/Projects/SandPiles/Slope_Cell.cpp.i:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Slope_Cell.cpp.i
+.PHONY : __/__/Projects/SandPiles/Slope_Cell.cpp.i
+
+__/__/Projects/SandPiles/Slope_Cell.s: __/__/Projects/SandPiles/Slope_Cell.cpp.s
+
+.PHONY : __/__/Projects/SandPiles/Slope_Cell.s
+
+# target to generate assembly for a file
+__/__/Projects/SandPiles/Slope_Cell.cpp.s:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/__/__/Projects/SandPiles/Slope_Cell.cpp.s
+.PHONY : __/__/Projects/SandPiles/Slope_Cell.cpp.s
+
+testConfiguration.o: testConfiguration.cpp.o
+
+.PHONY : testConfiguration.o
+
+# target to build an object file
+testConfiguration.cpp.o:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/testConfiguration.cpp.o
+.PHONY : testConfiguration.cpp.o
+
+testConfiguration.i: testConfiguration.cpp.i
+
+.PHONY : testConfiguration.i
+
+# target to preprocess a source file
+testConfiguration.cpp.i:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/testConfiguration.cpp.i
+.PHONY : testConfiguration.cpp.i
+
+testConfiguration.s: testConfiguration.cpp.s
+
+.PHONY : testConfiguration.s
+
+# target to generate assembly for a file
+testConfiguration.cpp.s:
+	cd /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug && $(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/testConfiguration.cpp.s
+.PHONY : testConfiguration.cpp.s
 
 testHelloWorld.o: testHelloWorld.cpp.o
 
@@ -287,8 +483,13 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... ctest_exe_testConfiguration"
 	@echo "... ctest_exe_testHelloWorld"
 	@echo "... ctest_exe_testRngTests"
 	@echo "... __/__/Projects/HelloWorld/HelloWorld.o"
@@ -297,6 +498,21 @@ help:
 	@echo "... __/__/Projects/RngTests/RngTests.o"
 	@echo "... __/__/Projects/RngTests/RngTests.i"
 	@echo "... __/__/Projects/RngTests/RngTests.s"
+	@echo "... __/__/Projects/SandPiles/Cell.o"
+	@echo "... __/__/Projects/SandPiles/Cell.i"
+	@echo "... __/__/Projects/SandPiles/Cell.s"
+	@echo "... __/__/Projects/SandPiles/Configuration.o"
+	@echo "... __/__/Projects/SandPiles/Configuration.i"
+	@echo "... __/__/Projects/SandPiles/Configuration.s"
+	@echo "... __/__/Projects/SandPiles/RNG_MT19937.o"
+	@echo "... __/__/Projects/SandPiles/RNG_MT19937.i"
+	@echo "... __/__/Projects/SandPiles/RNG_MT19937.s"
+	@echo "... __/__/Projects/SandPiles/Slope_Cell.o"
+	@echo "... __/__/Projects/SandPiles/Slope_Cell.i"
+	@echo "... __/__/Projects/SandPiles/Slope_Cell.s"
+	@echo "... testConfiguration.o"
+	@echo "... testConfiguration.i"
+	@echo "... testConfiguration.s"
 	@echo "... testHelloWorld.o"
 	@echo "... testHelloWorld.i"
 	@echo "... testHelloWorld.s"

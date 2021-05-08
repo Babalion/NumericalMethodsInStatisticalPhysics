@@ -95,6 +95,7 @@ clean: test/ctest/clean
 # Recursive "all" directory target.
 test/ctest/all: test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/all
 test/ctest/all: test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/all
+test/ctest/all: test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/all
 
 .PHONY : test/ctest/all
 
@@ -106,6 +107,7 @@ test/ctest/preinstall:
 # Recursive "clean" directory target.
 test/ctest/clean: test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/clean
 test/ctest/clean: test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/clean
+test/ctest/clean: test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/clean
 
 .PHONY : test/ctest/clean
 
@@ -116,12 +118,12 @@ test/ctest/clean: test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/clean
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/build.make CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/build.make CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles --progress-num=1,2,3,4,5 "Built target NumerischeMethodenStatistischenPhysik"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target NumerischeMethodenStatistischenPhysik"
 .PHONY : CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles 0
 .PHONY : CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/rule
@@ -143,7 +145,7 @@ CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/clean:
 test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/all:
 	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/build.make test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/build.make test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles --progress-num=6,7,8 "Built target ctest_exe_testHelloWorld"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles --progress-num=18,19,20 "Built target ctest_exe_testHelloWorld"
 .PHONY : test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/all
 
 # Build rule for subdir invocation for target.
@@ -170,7 +172,7 @@ test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/clean:
 test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/all:
 	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/build.make test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/depend
 	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/build.make test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles --progress-num=9,10,11 "Built target ctest_exe_testRngTests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles --progress-num=21,22,23 "Built target ctest_exe_testRngTests"
 .PHONY : test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/all
 
 # Build rule for subdir invocation for target.
@@ -189,6 +191,33 @@ ctest_exe_testRngTests: test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/rule
 test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/clean:
 	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/build.make test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/clean
 .PHONY : test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/clean
+
+#=============================================================================
+# Target rules for target test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir
+
+# All Build rule for target.
+test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/all:
+	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/depend
+	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles --progress-num=12,13,14,15,16,17 "Built target ctest_exe_testConfiguration"
+.PHONY : test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/all
+
+# Build rule for subdir invocation for target.
+test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release/CMakeFiles 0
+.PHONY : test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/rule
+
+# Convenience name for target.
+ctest_exe_testConfiguration: test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/rule
+
+.PHONY : ctest_exe_testConfiguration
+
+# clean rule for target.
+test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/build.make test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/clean
+.PHONY : test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

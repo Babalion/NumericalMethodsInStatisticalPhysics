@@ -23,6 +23,7 @@ public:
     void push_results(unsigned long long,double diff_LCG,double diff_MT19937,double time_LCG,double time_MT19937);
     void saveResults();
     void saveAndClearResults();
+
 private:
     std::vector<unsigned long long> list_n;
     std::vector<double> list_diff_LCG;
