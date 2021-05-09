@@ -5,7 +5,7 @@
 #include "HelloWorld.h"
 #include "../../lib/matplotlibcpp.h"
 #include "test.h"
-
+#include "../SandPiles/Configuration.h"
 namespace plt = matplotlibcpp;
 
 // Starts the Project Hello World. Returns 0 if no error occurs.

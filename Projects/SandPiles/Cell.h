@@ -14,10 +14,16 @@ public:
 
     [[nodiscard]] unsigned int getHeight() const;//("Why you ask for height and don't use it?")
     void setHeight(unsigned int height_);
+    //increases height by 1
+    void incHeight();
     friend bool operator==(const Cell lhs,const  Cell rhs);
 
 private:
     unsigned int height;
+    int slopeToNeighbours;
+public:
+    int getSlopeToNeighbours() const;
+    void setSlopeToNeighbours(int slopeToNeighbours);
 };
 
 

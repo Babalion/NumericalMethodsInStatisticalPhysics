@@ -57,6 +57,12 @@ add_executable(NumerischeMethodenStatistischenPhysik ${projects_SRC})
 target_link_libraries(NumerischeMethodenStatistischenPhysik ${ARMADILLO_LIBRARIES} matplotlib_cpp)
 set_target_properties(NumerischeMethodenStatistischenPhysik PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
+set(SandpilesPath "${PROJECT_SOURCE_DIR}/Projects/SandPiles")
+
+add_executable(SandPiles ${SandpilesPath}/SandPiles.cpp ${SandpilesPath}/RNG_MT19937.cpp ${SandpilesPath}/Configuration.cpp ${SandpilesPath}//Cell.cpp)
+target_link_libraries(SandPiles ${ARMADILLO_LIBRARIES} matplotlib_cpp)
+set_target_properties(SandPiles PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 
 enable_testing()
 add_subdirectory(test/ctest)
