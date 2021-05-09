@@ -186,7 +186,7 @@ void Configuration::animate(unsigned int timeSteps, int offsetFileName) {
         }
         //TODO do it like in example of matplotlib colorBar
         //plt::scatter(x,y,z);
-        plt::contour(x, y, z);
+        plt::plot_surface(x, y, z);
         plt::title("Sandpiles t=" + std::to_string(t+offsetFileName));
         //plt::pause(1);
         std::string s =
