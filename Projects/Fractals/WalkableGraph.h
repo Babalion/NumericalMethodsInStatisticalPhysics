@@ -66,13 +66,13 @@ public:
     void generateDimensionData(int maxIterations, int highestMaxSteps,int logInterval){
         file.open(filename);
         file << "maxSteps\tnumber-of-iterations\tcome-back-rate\n";
-        for (int i = 10; i < highestMaxSteps*10; i *= 10) {
+        for (int i = 100; i < highestMaxSteps*10; i *= 10) {
             int cameBack = 0;
 
             for (int j = 0; j < maxIterations; ++j) {
                 if ((j+1) % logInterval == 0) {
                     std::cout << "Euclidean2D maxSteps: 1E" << log10(i) << "\titeration: " << j+1 << std::endl;
-                    file << i << "\t" << cameBack*1.0/logInterval << std::endl;
+                    file << i << "\t" <<logInterval<<"\t"<< cameBack*1.0/logInterval << std::endl;
                     cameBack=0;
                 }
                 if (walk(i)) {
