@@ -17,51 +17,53 @@
 					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="install/strip">
+			<Target title="RNGTests">
+				<Option output="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/bin/RNGTests" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
-				<Option type="4"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/examples"/>
+					<Add directory="/usr/include/python3.7m"/>
+					<Add directory="/usr/lib/python3/dist-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 RNGTests"/>
 					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="install/local">
+			<Target title="RNGTests/fast">
+				<Option output="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/bin/RNGTests" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
-				<Option type="4"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/examples"/>
+					<Add directory="/usr/include/python3.7m"/>
+					<Add directory="/usr/lib/python3/dist-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="install">
-				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="list_install_components">
-				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="edit_cache">
-				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 RNGTests/fast"/>
 					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -77,53 +79,11 @@
 					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="NumerischeMethodenStatistischenPhysik">
-				<Option output="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/bin/NumerischeMethodenStatistischenPhysik" prefix_auto="0" extension_auto="0"/>
+			<Target title="edit_cache">
 				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/examples"/>
-					<Add directory="/usr/include/python3.7m"/>
-					<Add directory="/usr/lib/python3/dist-packages/numpy/core/include"/>
-					<Add directory="/usr/include/c++/8"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
-					<Add directory="/usr/include/c++/8/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
+				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 NumerischeMethodenStatistischenPhysik"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="NumerischeMethodenStatistischenPhysik/fast">
-				<Option output="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/bin/NumerischeMethodenStatistischenPhysik" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/examples"/>
-					<Add directory="/usr/include/python3.7m"/>
-					<Add directory="/usr/lib/python3/dist-packages/numpy/core/include"/>
-					<Add directory="/usr/include/c++/8"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
-					<Add directory="/usr/include/c++/8/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
-					<Add directory="/usr/include/x86_64-linux-gnu"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 NumerischeMethodenStatistischenPhysik/fast"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
 					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -186,6 +146,98 @@
 				<Option type="4"/>
 				<MakeCommands>
 					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 test"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="HelloWorld">
+				<Option output="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/bin/HelloWorld" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/examples"/>
+					<Add directory="/usr/include/python3.7m"/>
+					<Add directory="/usr/lib/python3/dist-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 HelloWorld"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="HelloWorld/fast">
+				<Option output="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/bin/HelloWorld" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/examples"/>
+					<Add directory="/usr/include/python3.7m"/>
+					<Add directory="/usr/lib/python3/dist-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 HelloWorld/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
 					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j8 -f &quot;/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -337,77 +389,67 @@
 			</Target>
 		</Build>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/HelloWorld/HelloWorld.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="HelloWorld"/>
 			<Option target="ctest_exe_testHelloWorld"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/HelloWorld/HelloWorld.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="HelloWorld"/>
 			<Option target="ctest_exe_testHelloWorld"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/HelloWorld/test.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="HelloWorld"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/HelloWorld/test.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="HelloWorld"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RNG_results.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="RNGTests"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RNG_results.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="RNGTests"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RngTests.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="RNGTests"/>
 			<Option target="ctest_exe_testRngTests"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/RngTests/RngTests.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="RNGTests"/>
 			<Option target="ctest_exe_testRngTests"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/Cell.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/Cell.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/Configuration.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/Configuration.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/RNG_MT19937.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/RNG_MT19937.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/SandPiles.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 			<Option target="SandPiles"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/Slope_Cell.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/Projects/SandPiles/Slope_Cell.h">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
+			<Option target="SandPiles"/>
 			<Option target="ctest_exe_testConfiguration"/>
-		</Unit>
-		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/main.cpp">
-			<Option target="NumerischeMethodenStatistischenPhysik"/>
 		</Unit>
 		<Unit filename="/home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/test/ctest/testConfiguration.cpp">
 			<Option target="ctest_exe_testConfiguration"/>

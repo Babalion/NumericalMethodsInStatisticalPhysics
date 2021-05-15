@@ -54,6 +54,6 @@ The final animation is produced by commandline `ffmpeg -framerate 25 -pattern_ty
 generates a `.mp4`or`.gif` from all `.png` files in the folder.
 
 A small impression as gif with a random initial setting and always add one sand in the middle of the field.
-There are more simulations, also in better quality in `./cmake-build-debug/bin/sandPiles`.
+There are more simulations, also in better quality in `./Projects/SandPiles`.
 
-![SandPiles 3D plot](./cmake-build-release/bin/out.gif)
+![SandPiles 3D plot](./Projects/SandPiles/out.gif)

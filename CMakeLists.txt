@@ -48,20 +48,24 @@ install(
 
 #add all .cpp files from the Projects. CONFIGURE_DEPENDS not recommended but useful:
 #https://cmake.org/cmake/help/latest/command/file.html#glob
-file(GLOB projects_SRC CONFIGURE_DEPENDS
-        ${PROJECT_SOURCE_DIR}/main.cpp
-        ${PROJECT_SOURCE_DIR}/Projects/*/*.cpp)
+file(GLOB HelloWorldCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/HelloWorld/*.cpp)
+add_executable(HelloWorld ${HelloWorldCPPs})
+target_link_libraries(HelloWorld ${ARMADILLO_LIBRARIES} matplotlib_cpp)
+set_target_properties(HelloWorld PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 
-add_executable(NumerischeMethodenStatistischenPhysik ${projects_SRC})
-target_link_libraries(NumerischeMethodenStatistischenPhysik ${ARMADILLO_LIBRARIES} matplotlib_cpp)
-set_target_properties(NumerischeMethodenStatistischenPhysik PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+file(GLOB RNGTestsCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/RngTests/*.cpp)
+add_executable(RNGTests ${RNGTestsCPPs})
+target_link_libraries(RNGTests ${ARMADILLO_LIBRARIES} matplotlib_cpp)
+set_target_properties(RNGTests PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-set(SandpilesPath "${PROJECT_SOURCE_DIR}/Projects/SandPiles")
 
-add_executable(SandPiles ${SandpilesPath}/SandPiles.cpp ${SandpilesPath}/RNG_MT19937.cpp ${SandpilesPath}/Configuration.cpp ${SandpilesPath}//Cell.cpp)
+file(GLOB sandPilesCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/SandPiles/*.cpp)
+add_executable(SandPiles ${sandPilesCPPs})
 target_link_libraries(SandPiles ${ARMADILLO_LIBRARIES} matplotlib_cpp)
 set_target_properties(SandPiles PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+
 
 
 enable_testing()

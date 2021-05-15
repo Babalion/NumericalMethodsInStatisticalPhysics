@@ -58,8 +58,9 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/NumerischeMethodenStatistischenPhysik.dir/DependInfo.cmake"
+  "CMakeFiles/RNGTests.dir/DependInfo.cmake"
   "CMakeFiles/SandPiles.dir/DependInfo.cmake"
+  "CMakeFiles/HelloWorld.dir/DependInfo.cmake"
   "test/ctest/CMakeFiles/ctest_exe_testHelloWorld.dir/DependInfo.cmake"
   "test/ctest/CMakeFiles/ctest_exe_testRngTests.dir/DependInfo.cmake"
   "test/ctest/CMakeFiles/ctest_exe_testConfiguration.dir/DependInfo.cmake"

@@ -4,6 +4,10 @@
 
 #include "RngTests.h"
 
+int main(){
+    runRngTests();
+}
+
 //startPoint for RNG-Tests Project. Returns 0 if no error occurs.
 int runRngTests() {
     std::cout << "This is RngTests. Endless (0) or interactive Mode (1)?" << std::endl;
