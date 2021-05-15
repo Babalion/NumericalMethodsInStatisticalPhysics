@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/ctest_example_addvalues_negpos.dir/testHelloWorld.cpp.o  -o ctest_example_addvalues_negpos 

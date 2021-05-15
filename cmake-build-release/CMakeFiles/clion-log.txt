@@ -1,6 +1,0 @@
-/home/chris/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - Unix Makefiles" /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik
--- Found Python3: /usr/bin/python3.7 (found version "3.7.3") found components: Interpreter Development 
--- Found Python3: /usr/lib/python3/dist-packages/numpy/core/include (found version "3.7.3") found components: NumPy Interpreter Development 
--- Configuring done
--- Generating done
--- Build files have been written to: /home/chris/Dokumente/GitHub/NumerischeMethodenStatistischenPhysik/cmake-build-release

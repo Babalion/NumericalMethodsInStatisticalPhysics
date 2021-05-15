@@ -1,5 +1,0 @@
-ctest_addvalues_zero 13 0.000199286
-ctest_addvalues_negpos 6 0.00038238
-ctest_testHelloWorld 11 0.000324583
-ctest_testRngTests 11 0.000314977
----
