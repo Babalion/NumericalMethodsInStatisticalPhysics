@@ -6,6 +6,8 @@
 #include <utility>
 #include <vector>
 #include "RNG_MT19937.h"
+#include <fstream>
+#include <iostream>
 
 
 class WalkableGraph {
@@ -15,14 +17,22 @@ private:
     unsigned int amountOfNeighbours;
     RNG_MT19937 rng;
 
-public:
+
+protected:
     void setCoordinates(const std::vector<int> &coords) {
         WalkableGraph::loc = coords;
     }
 
+    std::ofstream file;
+    std::string filename;
+public:
+    void resetCoordinates() {
+        loc=startLoc;
+    }
+
     //Creates a abstract graph with a given amountOfNeighbours and startLocation
-    WalkableGraph(unsigned int amountOfNeighbours, const std::vector<int>& startLoc) :
-            amountOfNeighbours(amountOfNeighbours), startLoc(startLoc), rng(0, amountOfNeighbours - 1) {
+    WalkableGraph(unsigned int amountOfNeighbours_, const std::vector<int> &startLoc, std::string filename) :
+            startLoc(startLoc),amountOfNeighbours(amountOfNeighbours_),rng(0, amountOfNeighbours_ - 1),filename(std::move(filename)) {
         loc = startLoc;//copy the initial position
     }
 
@@ -42,12 +52,35 @@ public:
     //returns true, if walker gets back to startPoint within maxSteps
     //returns false, if not
     bool walk(unsigned int maxSteps){
-        for (int i = 0; i < maxSteps; ++i) {
+        for (unsigned int i = 0; i < maxSteps; ++i) {
             hopToNeighbour(rng.getRandom());
             if (loc == startLoc) {
                 return true;
             }
         }
         return false;
+    }
+
+
+
+    void generateDimensionData(int maxIterations, int highestMaxSteps,int logInterval){
+        file.open(filename);
+        file << "maxSteps\tnumber-of-iterations\tcome-back-rate\n";
+        for (int i = 10; i < highestMaxSteps*10; i *= 10) {
+            int cameBack = 0;
+
+            for (int j = 0; j < maxIterations; ++j) {
+                if ((j+1) % logInterval == 0) {
+                    std::cout << "Euclidean2D maxSteps: 1E" << log10(i) << "\titeration: " << j+1 << std::endl;
+                    file << i << "\t" << cameBack*1.0/logInterval << std::endl;
+                    cameBack=0;
+                }
+                if (walk(i)) {
+                    cameBack++;
+                }
+                resetCoordinates();
+            }
+        }
+        file.close();
     }
 };

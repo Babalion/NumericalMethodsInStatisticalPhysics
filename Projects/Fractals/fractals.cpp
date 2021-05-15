@@ -6,28 +6,15 @@
 #include "Euclidean2DGraph.h"
 
 
-void runEuclidean2D(){
-    Euclidean2DGraph eu2D;
+void runEuclidean2D() {
 
-    std::fstream file;
-    file.open("./Euclidean2D.tsv");
-    file<<"number-of-walks\tcome-back-rate\n";
+    const int maxIterations = 1E4;
+    const int highestMaxSteps = 1E5;
+    const int logInterval = 1000;
 
-
-    for(int i=10;i<1E5;i*=10){
-        int cameBack=0;
-        for (int j = 0; j < 100; ++j) {
-            if(eu2D.walk(i)){
-                cameBack++;
-            }
-        }
-        file<<i<<"\t"<<cameBack*1.0/i<<std::endl;
-    }
-
-    file.close();
+    Euclidean2DGraph eu2D("euclidean2D.tsv");
+    eu2D.generateDimensionData(maxIterations, highestMaxSteps, logInterval);
 }
-
-
 
 
 int main() {

@@ -3,9 +3,15 @@ project(NumerischeMethodenStatistischenPhysik)
 
 find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
+
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -pthread")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
 set(BUILD_ARCH "-m64")
+
+
+
 
 #-----------------------------------------------------------------------------------------------------------
 #-------------------------MATPLOT-CPP-----------------------------------------------------------------------
@@ -69,6 +75,8 @@ file(GLOB fractalsCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/Fractal
 add_executable(fractals ${fractalsCPPs})
 target_link_libraries(fractals)
 set_target_properties(fractals PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+#target_compile_options(fractals PUBLIC "$<$<CONFIG:Debug>:${CMAKE_CXX_FLAGS_DEBUG}>")
+#target_compile_options(fractals PUBLIC "$<$<CONFIG:Release>:${CMAKE_CXX_FLAGS_RELEASE}>")
 
 
 
