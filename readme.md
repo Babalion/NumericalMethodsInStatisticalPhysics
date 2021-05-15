@@ -56,4 +56,5 @@ generates a `.mp4`or`.gif` from all `.png` files in the folder.
 A small impression as gif with a random initial setting and always add one sand in the middle of the field.
 There are more simulations, also in better quality in `./Projects/SandPiles`.
 
-![SandPiles 3D plot](./Projects/SandPiles/out.gif)
+![SandPiles 3D animation](./Projects/SandPiles/Renderings/SandGlass.gif)
+![SandPiles 3D animation](./Projects/SandPiles/Renderings/SandGlass.mp4)
