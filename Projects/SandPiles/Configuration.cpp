@@ -8,6 +8,7 @@ Configuration::Configuration(unsigned int fieldWidth, unsigned int criticalSlope
         criticalSlope(criticalSlope), fieldWidth(fieldWidth), rng(RNG_MT19937(0, 50)) {
     cells = std::vector<Cell>(fieldWidth * fieldWidth);
     initRandom();
+    createFolder();
 }
 
 Configuration::Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope) :
@@ -15,7 +16,7 @@ Configuration::Configuration(std::vector<Cell> &cells_, unsigned int criticalSlo
     fieldWidth = sqrt(cells_.size());
     cells = cells_;
     updateSlopes();
-
+    createFolder();
 }
 
 //initializes cells and slope-cells
@@ -211,6 +212,10 @@ void Configuration::addSand() {
 //starts at 0 to count
 void Configuration::animate(unsigned int timeSteps) {
     animate(timeSteps,0);
+}
+
+void Configuration::createFolder() {
+    fs::create_directories("./sandPiles");
 }
 
 

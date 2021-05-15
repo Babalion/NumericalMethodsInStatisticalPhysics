@@ -56,15 +56,19 @@ set_target_properties(HelloWorld PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BI
 
 file(GLOB RNGTestsCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/RngTests/*.cpp)
 add_executable(RNGTests ${RNGTestsCPPs})
-target_link_libraries(RNGTests ${ARMADILLO_LIBRARIES} matplotlib_cpp)
+target_link_libraries(RNGTests)
 set_target_properties(RNGTests PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 
 file(GLOB sandPilesCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/SandPiles/*.cpp)
 add_executable(SandPiles ${sandPilesCPPs})
-target_link_libraries(SandPiles ${ARMADILLO_LIBRARIES} matplotlib_cpp)
+target_link_libraries(SandPiles matplotlib_cpp stdc++fs)
 set_target_properties(SandPiles PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
+file(GLOB fractalsCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/Fractals/*.cpp)
+add_executable(fractals ${fractalsCPPs})
+target_link_libraries(fractals)
+set_target_properties(fractals PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 
 

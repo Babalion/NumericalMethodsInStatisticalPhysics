@@ -8,6 +8,10 @@
 #include "../SandPiles/Configuration.h"
 namespace plt = matplotlibcpp;
 
+int main(){
+    runHelloWorld();
+}
+
 // Starts the Project Hello World. Returns 0 if no error occurs.
 int runHelloWorld() {
     plt::plot({1, 3, 2, 4});
