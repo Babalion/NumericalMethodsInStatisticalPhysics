@@ -1,4 +1,4 @@
-function [maxSteps, numberofiterations, comebackrate] = importfile(filename, dataLines)
+function [maxSteps] = importfile(filename, dataLines)
 %IMPORTFILE Import data from a text file
 %  [MAXSTEPS, NUMBEROFITERATIONS, COMEBACKRATE] = IMPORTFILE(FILENAME)
 %  reads data from text file FILENAME for the default selection.

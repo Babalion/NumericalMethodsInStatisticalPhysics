@@ -27,12 +27,13 @@ protected:
     std::string filename;
 public:
     void resetCoordinates() {
-        loc=startLoc;
+        loc = startLoc;
     }
 
     //Creates a abstract graph with a given amountOfNeighbours and startLocation
     WalkableGraph(unsigned int amountOfNeighbours_, const std::vector<int> &startLoc, std::string filename) :
-            startLoc(startLoc),amountOfNeighbours(amountOfNeighbours_),rng(0, amountOfNeighbours_ - 1),filename(std::move(filename)) {
+            startLoc(startLoc), amountOfNeighbours(amountOfNeighbours_), rng(0, amountOfNeighbours_ - 1),
+            filename(std::move(filename)) {
         loc = startLoc;//copy the initial position
     }
 
@@ -49,37 +50,32 @@ public:
     }
 
     //let the walker walk
-    //returns true, if walker gets back to startPoint within maxSteps
-    //returns false, if not
-    bool walk(unsigned int maxSteps){
+    //returns number of steps until comeback, will break when reached maxSteps
+    //returns -1, if never
+    int walk(unsigned int maxSteps) {
         for (unsigned int i = 0; i < maxSteps; ++i) {
             hopToNeighbour(rng.getRandom());
-            if (loc == startLoc) {
-                return true;
+            if (loc == startLoc) {//we're back!
+                return static_cast<int>(i);
             }
         }
-        return false;
+        return -1;//walker escaped and has not come back
     }
 
-
-
-    void generateDimensionData(int maxIterations, int highestMaxSteps,int logInterval){
+    //generates a large .tsv file with number of steps until return for each random-walk
+    void comebacksUntilMaxStep(unsigned int maxIterations, unsigned int maxSteps) {
         file.open(filename);
-        file << "maxSteps\tnumber-of-iterations\tcome-back-rate\n";
-        for (int i = 100; i < highestMaxSteps*10; i *= 10) {
-            int cameBack = 0;
-
-            for (int j = 0; j < maxIterations; ++j) {
-                if ((j+1) % logInterval == 0) {
-                    std::cout << "Euclidean2D maxSteps: 1E" << log10(i) << "\titeration: " << j+1 << std::endl;
-                    file << i << "\t" <<logInterval<<"\t"<< cameBack*1.0/logInterval << std::endl;
-                    cameBack=0;
-                }
-                if (walk(i)) {
-                    cameBack++;
-                }
-                resetCoordinates();
+        file << "steps-until-comeback\n";
+        for (unsigned int i = 0; i < maxIterations; i++) {
+            if((i+1)%1000==0){
+                std::cout<<"iteration: ("<<i+1<<"/"<<maxIterations<<")"<<std::endl;
             }
+            int steps=walk(maxSteps);
+            if(steps>=0){//steps is smaller 0 if walker escaped
+                file << steps << std::endl;
+            }
+            //TODO OPTIMIZE: we only have to reset coordinates, if we aren't at the beginning already...
+            resetCoordinates();
         }
         file.close();
     }

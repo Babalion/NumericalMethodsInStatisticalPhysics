@@ -2,66 +2,77 @@
 // Created by chris on 15.05.21.
 //
 #include <iostream>
-#include <fstream>
 #include <thread>
+#include <string>
 #include "Euclidean2DGraph.h"
 #include "Euclidean3DGraph.h"
 
-//TODO input this in WalkableGraph
-/*
-// Calculation is done parallel
-// input: max_N: max Number to test (min 100)
-//        step: multiplicative step width (min 2)
-//        amount: amount of tests per number (min 1)
-void runParallel(unsigned int amount){
-    static const unsigned int hardwareCon = std::thread::hardware_concurrency();
-    static const unsigned int supportedThreads = hardwareCon == 0 ? 2 : hardwareCon;
-    static const unsigned int minWorkPerThread = 1; //at least an amount of piTest, from 10 to max_N should be done per Thread.
 
-    static const unsigned int maxAmountOfThreads = (amount + minWorkPerThread - 1) / minWorkPerThread;
-// this is the optimal number of threads....
-    static const unsigned int amountOfThreads =
-            supportedThreads > maxAmountOfThreads ? maxAmountOfThreads : supportedThreads;
-    std::cout << "Cool, you're using Multithreading! Number of used cores is: " << amountOfThreads << std::endl;
-    static const unsigned int WorkPerThread = amount / amountOfThreads;
-//TODO optimize Workload, that last thread has less work, not most work
+void runEuclidean2D() {
+
+    static const int maxIterations = 1E5;
+    static const int highestMaxSteps = 1E5;
+
+    Euclidean2DGraph eu2D("euclidean2D.tsv");
+    eu2D.comebacksUntilMaxStep(maxIterations, highestMaxSteps);
+}
+
+void runEuclidean2D_parallel() {
+    static const unsigned int amountOfThreads = 4;
+    static const int maxIterations = 1E5;
+    static const int highestMaxSteps = 1E7;
+
 
     std::vector<std::thread> threads(amountOfThreads - 1);
-    std::vector<RNGs> rGen(amountOfThreads);
-
+    std::vector<Euclidean2DGraph *> eu2D(amountOfThreads);
+    static const std::string filename_prefix = "euclidean2D_";
     for (int i = 0; i < threads.size(); i++) {
-        threads[i] = std::thread(compareRNGs_seq, std::ref(rng), std::ref(rGen[i]), max_N, min_N, step,
-                                 static_cast<int>(WorkPerThread));
+        eu2D[i] = new Euclidean2DGraph(filename_prefix + std::to_string(i) + ".tsv");
+        threads[i] = std::thread(
+                [](Euclidean2DGraph *eu2dGraph) { eu2dGraph->comebacksUntilMaxStep(maxIterations, highestMaxSteps); },
+                eu2D[i]);
     }
 
-    compareRNGs_seq(rng, rGen[threads.size()], max_N, min_N, step, amount - WorkPerThread * (amountOfThreads-1));
-
+    eu2D[amountOfThreads - 1] = new Euclidean2DGraph(filename_prefix + std::to_string(amountOfThreads - 1) + ".tsv");
+    eu2D[amountOfThreads - 1]->comebacksUntilMaxStep(maxIterations, highestMaxSteps);
 
     for (auto &i : threads) {
         i.join();
     }
-    rng.saveResults();
-}
-*/
-
-void runEuclidean2D() {
-
-    const int maxIterations = 1E3;
-    const int highestMaxSteps = 1E7;
-    const int logInterval = 100;
-
-    Euclidean2DGraph eu2D("euclidean2D.tsv");
-    eu2D.generateDimensionData(maxIterations, highestMaxSteps, logInterval);
 }
 
 void runEuclidean3D() {
 
-    const int maxIterations = 5E3;
-    const int highestMaxSteps = 1E7;
-    const int logInterval = 100;
+    const int maxIterations = 1E5;
+    const int highestMaxSteps = 1E5;
+    //const int logInterval = 1000;
 
     Euclidean3DGraph eu3D("euclidean3D.tsv");
-    eu3D.generateDimensionData(maxIterations, highestMaxSteps, logInterval);
+    eu3D.comebacksUntilMaxStep(maxIterations, highestMaxSteps);
+}
+
+void runEuclidean3D_parallel() {
+    static const unsigned int amountOfThreads = 4;
+    static const int maxIterations = 1E5;
+    static const int highestMaxSteps = 1E6;
+
+
+    std::vector<std::thread> threads(amountOfThreads - 1);
+    std::vector<Euclidean3DGraph *> eu3D(amountOfThreads);
+    static const std::string filename_prefix = "euclidean3D_";
+    for (int i = 0; i < threads.size(); i++) {
+        eu3D[i] = new Euclidean3DGraph(filename_prefix + std::to_string(i) + ".tsv");
+        threads[i] = std::thread(
+                [](Euclidean3DGraph *eu3dGraph) { eu3dGraph->comebacksUntilMaxStep(maxIterations, highestMaxSteps); },
+                eu3D[i]);
+    }
+
+    eu3D[amountOfThreads - 1] = new Euclidean3DGraph(filename_prefix + std::to_string(amountOfThreads - 1) + ".tsv");
+    eu3D[amountOfThreads - 1]->comebacksUntilMaxStep(maxIterations, highestMaxSteps);
+
+    for (auto &i : threads) {
+        i.join();
+    }
 }
 
 int main() {
@@ -77,10 +88,10 @@ int main() {
         case 0:
             return 0;
         case 1:
-            runEuclidean2D();
+            runEuclidean2D_parallel();
             break;
         case 2:
-            runEuclidean3D();
+            runEuclidean3D_parallel();
             break;
         default:
             main();
