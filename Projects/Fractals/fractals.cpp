@@ -6,73 +6,41 @@
 #include <string>
 #include "Euclidean2DGraph.h"
 #include "Euclidean3DGraph.h"
+#include <cmath>
 
 
-void runEuclidean2D() {
-
-    static const int maxIterations = 1E5;
-    static const int highestMaxSteps = 1E5;
-
-    Euclidean2DGraph eu2D("euclidean2D.tsv");
-    eu2D.stepsToReturn(maxIterations, highestMaxSteps);
-}
-
-void runEuclidean2D_parallel() {
-    static const unsigned int amountOfThreads = 7;
-    static const int maxIterations = 1E5;
-    static const int highestMaxSteps = 1E4;
-
+template<typename T>
+void runCalcSpectralDimension(const std::string &filePrefix, const unsigned int &amountOfWalks, const unsigned int &maxSteps) {
+    static const unsigned int hardwareCon = std::thread::hardware_concurrency();
+    static const unsigned int supportedThreads = hardwareCon == 0 ? 2 : hardwareCon;
+    static const unsigned int amountOfThreads = supportedThreads;// we use all cores!
+    const unsigned int iterationsPerThread = amountOfWalks / amountOfThreads; //ignore the last modulo steps... steps are high
+    std::cout<<amountOfThreads<<" threads will be used for calculation."<<std::endl;
 
     std::vector<std::thread> threads(amountOfThreads - 1);
-    std::vector<Euclidean2DGraph *> eu2D(amountOfThreads);
-    static const std::string filename_prefix = "euclidean2D_";
-    for (int i = 0; i < threads.size(); i++) {
-        eu2D[i] = new Euclidean2DGraph(filename_prefix + std::to_string(i) + ".tsv");
+    std::vector<T *> arrWalkableGraph(amountOfThreads);
+    for (unsigned int i = 0; i < threads.size(); i++) {
+        arrWalkableGraph[i] = new T(filePrefix + std::to_string(i) + ".tsv");
         threads[i] = std::thread(
-                [](Euclidean2DGraph *eu2dGraph) { eu2dGraph->stepsToReturn(maxIterations, highestMaxSteps); },
-                eu2D[i]);
+                [=](T *walkableGraph) { walkableGraph->stepsToReturn(iterationsPerThread, maxSteps); },
+                arrWalkableGraph[i]);
     }
 
-    eu2D[amountOfThreads - 1] = new Euclidean2DGraph(filename_prefix + std::to_string(amountOfThreads - 1) + ".tsv");
-    eu2D[amountOfThreads - 1]->stepsToReturn(maxIterations, highestMaxSteps);
+    arrWalkableGraph[amountOfThreads - 1] = new T(filePrefix + std::to_string(amountOfThreads - 1) + ".tsv");
+    arrWalkableGraph[amountOfThreads - 1]->stepsToReturn(iterationsPerThread, maxSteps);
 
     for (auto &i : threads) {
         i.join();
     }
 }
 
-void runEuclidean3D() {
-
-    const int maxIterations = 1E5;
-    const int highestMaxSteps = 1E5;
-    //const int logInterval = 1000;
-
-    Euclidean3DGraph eu3D("euclidean3D.tsv");
-    eu3D.stepsToReturn(maxIterations, highestMaxSteps);
-}
-
-void runEuclidean3D_parallel() {
-    static const unsigned int amountOfThreads = 7;
-    static const int maxIterations = 1E5;
-    static const int highestMaxSteps = 1E5;
-
-
-    std::vector<std::thread> threads(amountOfThreads - 1);
-    std::vector<Euclidean3DGraph *> eu3D(amountOfThreads);
-    static const std::string filename_prefix = "euclidean3D_";
-    for (int i = 0; i < threads.size(); i++) {
-        eu3D[i] = new Euclidean3DGraph(filename_prefix + std::to_string(i) + ".tsv");
-        threads[i] = std::thread(
-                [](Euclidean3DGraph *eu3dGraph) { eu3dGraph->stepsToReturn(maxIterations, highestMaxSteps); },
-                eu3D[i]);
-    }
-
-    eu3D[amountOfThreads - 1] = new Euclidean3DGraph(filename_prefix + std::to_string(amountOfThreads - 1) + ".tsv");
-    eu3D[amountOfThreads - 1]->stepsToReturn(maxIterations, highestMaxSteps);
-
-    for (auto &i : threads) {
-        i.join();
-    }
+void inputWalkParameters(unsigned int &amountOfWalks,unsigned int &maxSteps){
+    std::cout<<"How many walkers should be observed at all? (Input power to 10, so 6 for 1E6 walkers):"<<std::endl;
+    std::cin>>amountOfWalks;
+    amountOfWalks=static_cast<unsigned int>(pow(10,amountOfWalks));
+    std::cout<<"How many steps should the walkers be allowed to travel?(Input power to 10, so 6 for 1E6 steps):"<<std::endl;
+    std::cin>>maxSteps;
+    maxSteps=static_cast<unsigned int>(pow(10,maxSteps));
 }
 
 int main() {
@@ -83,15 +51,19 @@ int main() {
     std::cout << "2D-Euclidean lattice (1)" << std::endl;
     std::cout << "3D-Euclidean lattice (2)" << std::endl;
     int input;
+    unsigned int amountOfWalks=0;
+    unsigned int maxSteps=0;
     std::cin >> input;
     switch (input) {
         case 0:
             return 0;
         case 1:
-            runEuclidean2D_parallel();
+            inputWalkParameters(amountOfWalks,maxSteps);
+            runCalcSpectralDimension<Euclidean2DGraph>("euclidean2D_",amountOfWalks,maxSteps);
             break;
         case 2:
-            runEuclidean3D_parallel();
+            inputWalkParameters(amountOfWalks,maxSteps);
+            runCalcSpectralDimension<Euclidean2DGraph>("euclidean3D_",amountOfWalks,maxSteps);
             break;
         default:
             main();
