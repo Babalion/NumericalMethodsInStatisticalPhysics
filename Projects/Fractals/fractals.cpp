@@ -63,7 +63,7 @@ int main() {
             break;
         case 2:
             inputWalkParameters(amountOfWalks,maxSteps);
-            runCalcSpectralDimension<Euclidean2DGraph>("euclidean3D_",amountOfWalks,maxSteps);
+            runCalcSpectralDimension<Euclidean3DGraph>("euclidean3D_",amountOfWalks,maxSteps);
             break;
         default:
             main();
