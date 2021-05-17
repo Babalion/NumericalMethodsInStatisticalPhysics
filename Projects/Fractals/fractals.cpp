@@ -14,13 +14,13 @@ void runEuclidean2D() {
     static const int highestMaxSteps = 1E5;
 
     Euclidean2DGraph eu2D("euclidean2D.tsv");
-    eu2D.comebacksUntilMaxStep(maxIterations, highestMaxSteps);
+    eu2D.stepsToReturn(maxIterations, highestMaxSteps);
 }
 
 void runEuclidean2D_parallel() {
-    static const unsigned int amountOfThreads = 4;
+    static const unsigned int amountOfThreads = 7;
     static const int maxIterations = 1E5;
-    static const int highestMaxSteps = 1E7;
+    static const int highestMaxSteps = 1E4;
 
 
     std::vector<std::thread> threads(amountOfThreads - 1);
@@ -29,12 +29,12 @@ void runEuclidean2D_parallel() {
     for (int i = 0; i < threads.size(); i++) {
         eu2D[i] = new Euclidean2DGraph(filename_prefix + std::to_string(i) + ".tsv");
         threads[i] = std::thread(
-                [](Euclidean2DGraph *eu2dGraph) { eu2dGraph->comebacksUntilMaxStep(maxIterations, highestMaxSteps); },
+                [](Euclidean2DGraph *eu2dGraph) { eu2dGraph->stepsToReturn(maxIterations, highestMaxSteps); },
                 eu2D[i]);
     }
 
     eu2D[amountOfThreads - 1] = new Euclidean2DGraph(filename_prefix + std::to_string(amountOfThreads - 1) + ".tsv");
-    eu2D[amountOfThreads - 1]->comebacksUntilMaxStep(maxIterations, highestMaxSteps);
+    eu2D[amountOfThreads - 1]->stepsToReturn(maxIterations, highestMaxSteps);
 
     for (auto &i : threads) {
         i.join();
@@ -48,13 +48,13 @@ void runEuclidean3D() {
     //const int logInterval = 1000;
 
     Euclidean3DGraph eu3D("euclidean3D.tsv");
-    eu3D.comebacksUntilMaxStep(maxIterations, highestMaxSteps);
+    eu3D.stepsToReturn(maxIterations, highestMaxSteps);
 }
 
 void runEuclidean3D_parallel() {
-    static const unsigned int amountOfThreads = 4;
+    static const unsigned int amountOfThreads = 7;
     static const int maxIterations = 1E5;
-    static const int highestMaxSteps = 1E6;
+    static const int highestMaxSteps = 1E5;
 
 
     std::vector<std::thread> threads(amountOfThreads - 1);
@@ -63,12 +63,12 @@ void runEuclidean3D_parallel() {
     for (int i = 0; i < threads.size(); i++) {
         eu3D[i] = new Euclidean3DGraph(filename_prefix + std::to_string(i) + ".tsv");
         threads[i] = std::thread(
-                [](Euclidean3DGraph *eu3dGraph) { eu3dGraph->comebacksUntilMaxStep(maxIterations, highestMaxSteps); },
+                [](Euclidean3DGraph *eu3dGraph) { eu3dGraph->stepsToReturn(maxIterations, highestMaxSteps); },
                 eu3D[i]);
     }
 
     eu3D[amountOfThreads - 1] = new Euclidean3DGraph(filename_prefix + std::to_string(amountOfThreads - 1) + ".tsv");
-    eu3D[amountOfThreads - 1]->comebacksUntilMaxStep(maxIterations, highestMaxSteps);
+    eu3D[amountOfThreads - 1]->stepsToReturn(maxIterations, highestMaxSteps);
 
     for (auto &i : threads) {
         i.join();
