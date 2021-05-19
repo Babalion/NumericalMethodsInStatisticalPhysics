@@ -61,3 +61,8 @@ There are more simulations, also in better quality in `./Projects/SandPiles`.
 ![a SandGlass with a contour-plot-animation](./Projects/SandPiles/Renderings/TopDown.mp4)
 
 ![a SandGlass as 3D animation](./Projects/SandPiles/Renderings/SandGlass.mp4)
+
+## Calculate spectral dimensions of fractal structures
+Interesting literature:
+https://hal.archives-ouvertes.fr/file/index/docid/232136/filename/ajp-jphyslet_1983_44_1_13_0.pdf
+https://link.springer.com/content/pdf/10.1007/BF01011791.pdf

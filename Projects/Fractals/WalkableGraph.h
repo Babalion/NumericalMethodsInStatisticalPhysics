@@ -48,30 +48,29 @@ public:
 
     //let the walker walk until come back
     //returns number of steps until comeback, will break when reached maxSteps
-    //returns -1, if never and sets location to start
-    int walkUntilComeBack(unsigned int maxSteps) {
-        for (unsigned int i = 0; i < maxSteps; ++i) {
+    //returns 0, if never and sets location to start
+    uint_fast64_t walkUntilComeBack(uint_fast64_t maxSteps) {
+        for (uint_fast64_t i = 0; i < maxSteps; ++i) {
             hopToNeighbour(rng.getRandom());
             if (loc == startLoc) {//we're back!
                 return static_cast<int>(i);
             }
         }
         resetCoordinates();
-        return -1;//walker escaped and has not come back
+        return 0;//walker escaped and has not come back
     }
 
     //generates a large .tsv file with number of steps until return for each random-walk
-    void stepsToReturn(unsigned int maxIterations, unsigned int maxSteps) {
+    void stepsToReturn(uint_fast64_t maxIterations, unsigned int maxSteps) {
         file.open(filename);
         file << "steps-until-comeback\n";
-        for (unsigned int i = 0; i < maxIterations; i++) {
-            if ((i + 1) % 1000 == 0) {
+        for (uint_fast64_t i = 0; i < maxIterations; i++) {
+            if ((i + 1) % 5000 == 0) {
                 std::cout << "iteration: (" << i + 1 << "/" << maxIterations << ")" << std::endl;
             }
-            int steps = walkUntilComeBack(maxSteps);
-            if (true) {//steps is smaller 0 if walker escaped
-                file << steps << std::endl;
-            }
+            uint_fast64_t steps = walkUntilComeBack(maxSteps);
+            //steps is 0 if walker escaped
+            file << steps << std::endl;
         }
         file.close();
     }
