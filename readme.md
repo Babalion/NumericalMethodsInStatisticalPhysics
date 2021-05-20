@@ -34,7 +34,7 @@ would be a thinkable limit.
 The **linear congruential RNG** (LCG) is limited in randomness and periodicity wich results in limited convergence. With
 this RNG it is not possible to determine pi more exactly than to 1E-2.
 
-##Forest Fire Simulations
+## Forest Fire Simulations
 There are some ineresting Simulations of Forest-Fire-Cellular-Automatons:
 
 https://people.sc.fsu.edu/~jburkardt/c_src/forest_fire_simulation/forest_fire_simulation.html
