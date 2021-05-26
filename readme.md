@@ -3,6 +3,8 @@
 The lecture was held by Markus Quandt and Giuseppe Burgio in summer term 2020 at University of Tübingen.
 
 The used language for simulations is C++20. The IDE is CLion.
+The used build-system is Debian Buster.
+It should also work on other platforms with small modifications in CMakeLists.txt.
 
 ## Installation requirements
 
@@ -11,11 +13,26 @@ The used language for simulations is C++20. The IDE is CLion.
 3. Matplotlib-cpp from https://github.com/lava/matplotlib-cpp
 
 ## How to compile?
+This is a **CMake-Project**. Compilation and building is pretty easy. Simply run in main folder via terminal:
 
-## Tests
+<code>
+cmake --build ./cmake-build-release --target {PROJECT-NAME} -- -j 6
+</code>
+
+<br>For example for building the binary of the fractals-project run:
+
+<code>
+cmake --build ./cmake-build-release --target fractals -- -j 6
+</code>
+
+The binary is located in `./cmake-build-release/bin/fractals`.
+All project names are noted in CMakeLists.txt.
+
+## Unit Tests
 
 Unit-Tests are performed with CTest. Therefore, every project has its own cpp-File with the
-nomenclature: `test{projectName}.cpp` in folder `test/ctest`
+nomenclature: `test{projectName}.cpp` in folder `test/ctest`.
+There aren't Unit-Test for all projects and functions.
 
 ## Testing different random-number-generators (RNGs)
 
@@ -26,7 +43,9 @@ I did a pi-Test with 2 different random number generators (RNGs). The program ca
 The RNGs were used from standard C++ header `Random.h`.
 
 We can see the convergence of the **Mersenne-Twister MT19937** algorithm with
-![O(sqrt(n))](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BO%7D%28%5Csqrt%7Bn%7D%29)
+
+
+
 up to 1E10 random numbers per calculated point. Convergence doesn't seem to slow down until 1E10, so I assume we can
 calculate pi more exactly with more time. The maximum period of random numbers of MT19937 is pow(2,19937)-1, so this
 would be a thinkable limit.
