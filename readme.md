@@ -134,7 +134,7 @@ three-times and so on. So every next measurement is influenced by its predecesso
 auto-correlation-times and as a consequence in large systematical errors.
 
 #### 3D Euclidean lattice
-In this simulation we observe X random walkers while walking on a 3D euclidean lattice.
+In this simulation we observe 4.6E7 random walkers while walking on a 3D euclidean lattice.
 We normalize the resulting histogram of comebacks and draw it in a loglog-scatter-plot against the number of steps.
 
 One observes the following plot:
