@@ -76,8 +76,11 @@ file(GLOB fractalsCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/Fractal
 add_executable(fractals ${fractalsCPPs})
 target_link_libraries(fractals)
 set_target_properties(fractals PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-#target_compile_options(fractals PUBLIC "$<$<CONFIG:Debug>:${CMAKE_CXX_FLAGS_DEBUG}>")
-#target_compile_options(fractals PUBLIC "$<$<CONFIG:Release>:${CMAKE_CXX_FLAGS_RELEASE}>")
+
+file(GLOB tspCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/TSP/*.cpp)
+add_executable(tsp ${tspCPPs})
+target_link_libraries(tsp)
+set_target_properties(tsp PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 
 
