@@ -3,6 +3,7 @@ project(NumerischeMethodenStatistischenPhysik)
 
 find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
+find_package( OpenCV REQUIRED )
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pthread")
@@ -81,6 +82,13 @@ file(GLOB tspCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/TSP/*.cpp)
 add_executable(tsp ${tspCPPs})
 target_link_libraries(tsp)
 set_target_properties(tsp PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+add_subdirectory(lib/cv-plot-1.2.1/CvPlot)
+file(GLOB isingCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/Ising/*.cpp)
+add_executable(ising ${isingCPPs})
+target_link_libraries(ising ${OpenCV_LIBS} CvPlot)
+set_target_properties(ising PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
 
 
 
