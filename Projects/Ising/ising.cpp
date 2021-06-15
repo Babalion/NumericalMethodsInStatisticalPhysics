@@ -1,11 +1,13 @@
 //
 // Created by chris on 14.06.21.
 //
-#include "SpinLattice.h"
+#include "SpinLattice2level.h"
+#include "SpinLatticeTheta.h"
 #include <CvPlot/cvplot.h>
 
 int main() {
-    SpinLattice sl(75);
+    SpinLattice2level sl(75);
+    sl.J=1;
     std::vector<float> lowEnergy;
     std::vector<float> highEnergy;
     std::vector<float> lowEnergyHB;
@@ -22,12 +24,12 @@ int main() {
     lowEnergy.reserve(runs);
     entropy.reserve(runs);
     for (int i = 0; i < runs; i++) {
-        metropolisSweep(sl, 0.001, 1000);
+        metropolisSweep(sl, 0.001, 100);
         lowEnergy.push_back(sl.calcEnergy());
         gui.notify(sl);
     }
     for (int i = 0; i < runs; i++) {
-        metropolisSweep(sl, 1000, 1000);
+        metropolisSweep(sl, 1000, 100);
         highEnergy.push_back(sl.calcEnergy());
         gui.notify(sl);
     }

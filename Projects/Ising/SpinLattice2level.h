@@ -10,9 +10,9 @@
 #include <opencv2/opencv.hpp>
 
 // a quadratic 2-level ising-lattice
-class SpinLattice {
+class SpinLattice2level {
 public:
-    explicit SpinLattice(unsigned int sights);
+    explicit SpinLattice2level(unsigned int sights);
 
 
     // prints a matrix-scheme to the console
@@ -51,10 +51,10 @@ private:
     std::vector<int> spins;
 };
 
-void metropolisSweep(SpinLattice &spinLattice, float temp);
-void metropolisSweep(SpinLattice &spinLattice, float temp,unsigned int iterations);
+void metropolisSweep(SpinLattice2level &spinLattice, float temp);
+void metropolisSweep(SpinLattice2level &spinLattice, float temp, unsigned int iterations);
 
-void heatBathSweep(SpinLattice &spinLattice, float temp);
+void heatBathSweep(SpinLattice2level &spinLattice, float temp);
 
 
 /**
@@ -81,7 +81,7 @@ public:
     /**
      * Paint the gui
      */
-    void notify(const SpinLattice &instance);
+    void notify(const SpinLattice2level &instance);
 
     /**
      * The time the GUI pauses after each update. Set to 0 to let

@@ -1,10 +1,11 @@
 //
 // Created by chris on 14.06.21.
 //
-#include "SpinLattice.h"
+#include "SpinLattice2level.h"
 
 
-SpinLattice::SpinLattice(unsigned int sights) : J(1), sights(sights) {
+
+SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1), sights(sights) {
     auto dist = std::uniform_int_distribution<int>(0, 1);
     auto rd = std::random_device();
     auto mt = std::mt19937(rd());
@@ -16,7 +17,7 @@ SpinLattice::SpinLattice(unsigned int sights) : J(1), sights(sights) {
 
 }
 
-void SpinLattice::printSpins() {
+void SpinLattice2level::printSpins() {
     for (unsigned int i = 0; i < sights * sights; i++) {
         std::cout << spins[i];
         if ((i + 1) % sights == 0) {//right boarder
@@ -28,7 +29,7 @@ void SpinLattice::printSpins() {
     std::cout << std::endl;
 }
 
-int SpinLattice::calcEnergy() const {
+int SpinLattice2level::calcEnergy() const {
     int energy = 0;
     for (size_t i = 0; i < sights; ++i) {
         for (size_t j = 0; j < sights; ++j) {
@@ -38,7 +39,7 @@ int SpinLattice::calcEnergy() const {
     return energy;
 }
 
-int SpinLattice::calcEnergy(unsigned int x, unsigned int y) const {
+int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y) const {
     const int J_val = J;
     const unsigned int i = y + x * sights;
     int energy = 0;
@@ -55,10 +56,10 @@ int SpinLattice::calcEnergy(unsigned int x, unsigned int y) const {
         energy += spins[i] * spins[i + sights];
     }
 
-    return -1*J_val*energy;
+    return -1 * J_val * energy;
 }
 
-int SpinLattice::calcEnergy(unsigned int x, unsigned int y, int newSpin) {
+int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) {
     auto oldSpin = spins[y + x * sights];
     spins[y + x * sights] = newSpin;
     auto energy = calcEnergy(x, y);
@@ -72,7 +73,7 @@ int SpinLattice::calcEnergy(unsigned int x, unsigned int y, int newSpin) {
 ////////////////////////////////////////////////////////////////////////////////
 
 
-void metropolisSweep(SpinLattice &spinLattice, float temp) {
+void metropolisSweep(SpinLattice2level &spinLattice, float temp) {
     std::uniform_real_distribution<float> u(0, 1);
     std::uniform_int_distribution<int> newSpinGenerator(0, 1);
     std::random_device rd;
@@ -96,15 +97,16 @@ void metropolisSweep(SpinLattice &spinLattice, float temp) {
     }
 }
 
-void metropolisSweep(SpinLattice &spinLattice, float temp, unsigned int iterations) {
+void metropolisSweep(SpinLattice2level &spinLattice, float temp, unsigned int iterations) {
     for (size_t i = 0; i < iterations; ++i) {
         metropolisSweep(spinLattice, temp);
     }
 }
 
-int heatBathSumOfNeighbours(SpinLattice &sl, unsigned int i, unsigned int j) {
+int heatBathSumOfNeighbours(SpinLattice2level &sl, unsigned int x, unsigned int y) {
     const auto sights = sl.getSights();
     const auto &spins = sl.getSpins();
+    const unsigned int i = y + x * sights;
     int sum = 0;
     if (i % sights != 0) {// not at left boarder
         sum += spins[i - 1];
@@ -122,17 +124,17 @@ int heatBathSumOfNeighbours(SpinLattice &sl, unsigned int i, unsigned int j) {
     return sum;
 }
 
-void heatBathSweep(SpinLattice &spinLattice, float temp) {
-    const int J_val = spinLattice.J;
+void heatBathSweep(SpinLattice2level &spinLattice, float temp) {
+    const auto J_val = spinLattice.J;
     std::uniform_real_distribution<float> u(0, 1);
     std::random_device rd;
     auto mt = std::mt19937(rd());
     for (size_t i = 0; i < spinLattice.getSights(); ++i) {
         for (size_t j = 0; j < spinLattice.getSights(); ++j) {
-            const int oldEnergy = spinLattice.calcEnergy(i, j);
+            const int thisSpin = spinLattice(i, j);
             const int delta = heatBathSumOfNeighbours(spinLattice, i, j);
-            const float k = static_cast<float>(J_val * delta + oldEnergy) / temp;
-            const float q = exp(-1.0f * k) / 2 / cosh(k);
+            const float k = static_cast<float>(J_val * delta + thisSpin) / temp;
+            const float q = exp(-1.0f * k) / 2.0f / cosh(k);
             const float r = u(mt);
             if (r < q) {
                 spinLattice(i, j) = 1;
@@ -150,7 +152,7 @@ void heatBathSweep(SpinLattice &spinLattice, float temp) {
 /// RuntimeGUI
 ////////////////////////////////////////////////////////////////////////////////
 
-void RuntimeGUI::notify(const SpinLattice &instance) {
+void RuntimeGUI::notify(const SpinLattice2level &instance) {
     // The screen is split as follows:
     // 75% points
     // 25% status
