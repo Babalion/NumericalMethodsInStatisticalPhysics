@@ -161,3 +161,19 @@ p_0=a*\exp^{\beta n}
 </code>
 
 One can therefore conclude that the spectral dimension diverges towards infinity.
+
+## Solve the travelling-salesman-problem (tsp) with a simulated annealing algorithm
+The code from this project is as stub. The working code can be viewed in another repository https://github.com/Babalion/simulated-annealing-tsp.
+
+## Ising Model
+### 2 Level System
+You can run a spin-system with N² 2-level spins at a given temperature. You can view the system live via openCV.
+An example is shown here:
+
+....
+
+### Sigma-Model
+This is an Ising-Spin-System on a square lattice where every spin can direct in an arbitrary angle in 2D.
+One can thus parametrize each spin via angle `theta`. You can also view the simulation live via openCV. Example below:
+
+....
