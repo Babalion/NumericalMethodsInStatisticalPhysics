@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cmath>
 #include "Cell.h"
-#include "../../lib/matplotlibcpp.h"
+//#include "../../lib/matplotlibcpp.h"
 #include "RNG_MT19937.h"
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -24,6 +24,7 @@ public:
     //creates a Configuration with a given cells-vector
     Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope);
 
+    /// Generates each frame as image and aves to folder
     void animate(unsigned int timeSteps, int offsetFileName);
 
     void runTime();

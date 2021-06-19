@@ -119,7 +119,6 @@ void Configuration::runTime() {
 }
 
 
-namespace plt = matplotlibcpp;
 
 void Configuration::printFig() {
     /*
