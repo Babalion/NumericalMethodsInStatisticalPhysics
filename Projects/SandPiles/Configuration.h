@@ -7,19 +7,21 @@
 #include <cmath>
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <random>
 #include <vector>
 
 #include "Cell.h"
-#include "RNG_MT19937.h"
 
 
 class Configuration {
 public:
-    //field width should be bigger or equal than 2
-    // initialization is random between 0 and 20
+    /**
+     * field width should be bigger or equal than 2
+     * initialization is random between 0 and 20
+     */
     Configuration(unsigned int fieldWidth, unsigned int criticalSlope);
 
-    //creates a Configuration with a given cells-vector
+    /// creates a Configuration with a given cells-vector
     Configuration(std::vector<Cell> &cells_, unsigned int criticalSlope);
 
     void runTime();
@@ -28,22 +30,27 @@ public:
 
     void printToConsole();
 
-    [[nodiscard]] int amountOfSand();
+    [[nodiscard]] unsigned int amountOfSand() const;
 
-    [[nodiscard]] int maxHeight();
+    [[nodiscard]] unsigned int maxHeight() const;
 
-    [[nodiscard]] int getCriticality();
+    [[nodiscard]] unsigned int minHeight() const;
+
+    [[nodiscard]] unsigned int getCriticality() const;
 
     [[nodiscard]] const std::vector<Cell> &getCells() const;
 
     [[nodiscard]] unsigned int getFieldWidth() const;
 
+    [[nodiscard]] unsigned int getTime() const;
+
 private:
     void initRandom();
+
     void updateSlopes();
 
     unsigned int fieldWidth;
     unsigned int criticalSlope;
     std::vector<Cell> cells;
-    RNG_MT19937 rng;
+    unsigned int time;
 };

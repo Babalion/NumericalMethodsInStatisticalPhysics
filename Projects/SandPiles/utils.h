@@ -6,6 +6,15 @@
 #include "Configuration.h"
 
 /**
+ * a function for convenience creating a Scalar from HEX-colors
+ * @param hexValue: a Color in HEX-Format like #FFA617, exchange # with 0X
+ * @return a OpenCV Scalar-object
+ */
+cv::Scalar hexToCVScalar(int hexValue){
+    return cv::Scalar(((hexValue) & 0xFF),((hexValue >> 8) & 0xFF) ,((hexValue >> 16) & 0xFF));
+}
+
+/**
  * This is the runtime GUI that let's you watch what happens during the
  * optimization procedure
  */
@@ -65,9 +74,8 @@ void RuntimeGUI::notify(const Configuration &conf) {
                 cv::FONT_HERSHEY_PLAIN,
                 0.9,
                 cv::Scalar(255, 255, 255));
-    /*
     ss.str("");
-    ss << "outer = " << config.outer;
+    ss << "amount of sand = " << conf.amountOfSand();
     cv::putText(gui,
                 ss.str(),
                 cv::Point(statusCol, 30),
@@ -75,7 +83,7 @@ void RuntimeGUI::notify(const Configuration &conf) {
                 0.9,
                 cv::Scalar(255, 255, 255));
     ss.str("");
-    ss << "inner = " << config.inner;
+    ss << "max height = " << conf.maxHeight();
     cv::putText(gui,
                 ss.str(),
                 cv::Point(statusCol, 45),
@@ -83,7 +91,7 @@ void RuntimeGUI::notify(const Configuration &conf) {
                 0.9,
                 cv::Scalar(255, 255, 255));
     ss.str("");
-    ss << "energy = " << config.energy;
+    ss << "criticality = " << conf.getCriticality();
     cv::putText(gui,
                 ss.str(),
                 cv::Point(statusCol, 60),
@@ -91,7 +99,7 @@ void RuntimeGUI::notify(const Configuration &conf) {
                 0.9,
                 cv::Scalar(255, 255, 255));
     ss.str("");
-    ss << "best energy = " << config.bestEnergy;
+    ss << "time = " << conf.getTime();
     cv::putText(gui,
                 ss.str(),
                 cv::Point(statusCol, 75),
@@ -99,7 +107,7 @@ void RuntimeGUI::notify(const Configuration &conf) {
                 0.9,
                 cv::Scalar(255, 255, 255));
 
-    ss.str("");
+    ss.str("");/*
     ss << "epsilon =  = " << config.bestEnergy;
     cv::putText(gui,
                 ss.str(),
@@ -109,10 +117,7 @@ void RuntimeGUI::notify(const Configuration &conf) {
                 cv::Scalar(255, 255, 255));
 */
 
-    // Plot the charts
-    // [...]
 
-    // Plot the cities
     // Determine the minimum and maximum X/Y
     static const unsigned int minX = 0;
     static const unsigned int minY = 0;
@@ -128,10 +133,16 @@ void RuntimeGUI::notify(const Configuration &conf) {
         compression = (gui.rows - 10) / height;
     }
 
-    // Calculate the highest height
-    unsigned int maxHeight=conf.getCells()[0].getHeight();
-    for (auto i : conf.getCells()) {
-        maxHeight=std::max(maxHeight,i.getHeight());
+    // Calculate the highest height to rescale colors
+    /*
+     * unsigned const static int maxHeight=conf.maxHeight()-5;
+     */
+    // if you dont want color rescale, comment out the following lines and uncomment lines above
+    unsigned static int maxHeight = conf.maxHeight();
+    unsigned static int minHeight = conf.minHeight();
+    if (conf.getTime() % 100 == 0) {
+        maxHeight = conf.maxHeight();
+        minHeight = conf.minHeight();
     }
 
     // Paint the spins
@@ -140,31 +151,29 @@ void RuntimeGUI::notify(const Configuration &conf) {
         p1.x = static_cast<float>(i % maxX) * compression + 10;
         p1.y = static_cast<float>(i / maxY) * compression + 10;
 
-        auto color=cv::Scalar();
-        if (conf.getCells()[i].getHeight()>maxHeight*6/7) {
-            color=cv::Scalar(106, 0, 255);
-        }else if(conf.getCells()[i].getHeight()>maxHeight*5/7){
-            color=cv::Scalar(132, 91, 255);
-        }else if(conf.getCells()[i].getHeight()>maxHeight*4/7){
-            color=cv::Scalar(157, 132, 255);
-        }else if(conf.getCells()[i].getHeight()>maxHeight*3/7){
-            color=cv::Scalar(182, 166, 255);
-        }else if(conf.getCells()[i].getHeight()>maxHeight*2/7){
-            color=cv::Scalar(206, 197, 255);
-        }else if(conf.getCells()[i].getHeight()>maxHeight*1/7){
-            color=cv::Scalar(230, 226, 255);
-        }else{
-            color=cv::Scalar(255, 255, 255);
+        static const int numOfColors = 7;
+        float range = static_cast<float>(conf.getCells()[i].getHeight() - minHeight) / static_cast<float>(maxHeight - minHeight) * numOfColors;
+
+        auto color = cv::Scalar();
+        // Color-palette from https://gka.github.io/palettes/#/7|d|ff006a,ffffff,ffffff|ffffff,ffffff,0088d7|1|1
+        if (range > 6) {
+            color = hexToCVScalar(0Xff006a);
+        } else if (range > 5) {
+            color = hexToCVScalar(0Xff849d);
+        } else if (range > 4) {
+            color = hexToCVScalar(0Xffc5ce);
+        } else if (range > 3) {
+            color = hexToCVScalar(0Xffffff);
+        } else if (range > 2) {
+            color = hexToCVScalar(0Xc2d5f2);
+        } else if (range > 1) {
+            color = hexToCVScalar(0X7faee5);
+        } else {
+            color = hexToCVScalar(0X0088d7);
         }
         cv::circle(gui, p1, 3, color, 3);
     }
 
     cv::imshow("GUI", gui);
     cv::waitKey(waitTime);
-    /*
-    if (config.terminated) {
-        cv::waitKey(0);
-    } else {
-        cv::waitKey(waitTime);
-    }*/
 }

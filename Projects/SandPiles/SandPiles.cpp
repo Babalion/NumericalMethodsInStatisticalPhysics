@@ -23,4 +23,5 @@ int main() {
         gui.notify(conf);
     }
     cv::waitKey(0);
+    cv::destroyAllWindows();
 }
