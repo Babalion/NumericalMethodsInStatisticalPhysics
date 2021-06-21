@@ -16,7 +16,7 @@ public:
     void setHeight(unsigned int height_);
     //increases height by 1
     void incHeight();
-    friend bool operator==(const Cell lhs,const  Cell rhs);
+    friend bool operator==(const Cell &lhs,const  Cell &rhs);
 
 private:
     unsigned int height;

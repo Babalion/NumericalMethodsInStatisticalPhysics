@@ -20,6 +20,6 @@ Slope_Cell::Slope_Cell(int slope):slope(slope) {
 
 }
 
-bool operator==(const Slope_Cell lhs, const Slope_Cell rhs) {
+bool operator==(const Slope_Cell &lhs, const Slope_Cell &rhs) {
     return lhs.getSlope()==rhs.getSlope();
 }

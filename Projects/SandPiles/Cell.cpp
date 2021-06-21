@@ -20,7 +20,7 @@ Cell::Cell(unsigned int height):height(height),slopeToNeighbours(0) {
 Cell::Cell():height(0) {
 }
 
-bool operator==(const Cell lhs, const Cell rhs) {
+bool operator==(const Cell &lhs, const Cell &rhs) {
     return (lhs.height==rhs.height)&&(lhs.getSlopeToNeighbours()==rhs.getSlopeToNeighbours());
 }
 

@@ -3,27 +3,24 @@
 //
 
 #include "Configuration.h"
+#include "utils.h"
 
 int main() {
-    /*
-    std::vector<Cell> cells(10000);
-    for (int i = 0; i < 100; ++i) {
-        cells.emplace_back(0);
-    }*/
-    Configuration conf(100, 4);
-    for (int i = 0; i < 100; ++i) {
-        if (i % 5 == 0) {
-            conf.animate(1, i);
-        } else {
-            conf.runTime();
+    Configuration conf(50, 4);
+    // Register the GUI
+    // You can specify the dimensions of the window
+    RuntimeGUI gui(1000, 1200);
+    gui.waitTime = 7;
+    gui.notify(conf);
+
+    static const int runs =10000;
+
+    for (int i = 0; i < runs; i++) {
+        if(i%3==0){
+            conf.addSand();
         }
+        conf.runTime();
+        gui.notify(conf);
     }
-    for (int i = 0; i < 50000; ++i) {
-        conf.addSand();
-        if (i % 20 == 0) {
-            conf.animate(1, i + 100);
-        } else {
-            conf.runTime();
-        }
-    }
+    cv::waitKey(0);
 }

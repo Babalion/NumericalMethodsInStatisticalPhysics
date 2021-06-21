@@ -17,7 +17,7 @@ int testH_V_Slopes() {
 
     assertEqual (conf.getFieldWidth() == sqrt(cells.size()));
 
-    conf.plot();
+    conf.printToConsole();
 
     std::vector<Cell> cell_after1Run({Cell(1), Cell(1), Cell(4),
                                       Cell(5), Cell(7), Cell(1),
@@ -25,7 +25,7 @@ int testH_V_Slopes() {
 
     conf.runTime();
     assertEqual (conf.getCells() == cell_after1Run); //doesnt work bec Slope doesn't match
-    conf.plot();
+    conf.printToConsole();
     conf.printFig();
     return err_code;
 }

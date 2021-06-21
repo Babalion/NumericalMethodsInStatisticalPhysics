@@ -13,7 +13,7 @@ public:
     explicit Slope_Cell(int slope);
     [[nodiscard]] int getSlope() const;//("Why you aks for slope and don't use it?")
     void setSlope(int slope);
-    friend bool operator==(const Slope_Cell lhs,const  Slope_Cell rhs);
+    friend bool operator==(const Slope_Cell &lhs,const  Slope_Cell &rhs);
 private:
     int slope;
 

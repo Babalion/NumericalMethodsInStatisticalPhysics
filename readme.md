@@ -84,7 +84,7 @@ There are more simulations, also in better quality in `./Projects/SandPiles`.
 
 ![Example Image](./Projects/SandPiles/Renderings/ImageTopDown.png)
 
-![a SandGlass with a contour-plot-animation](./Projects/SandPiles/Renderings/TopDown.mp4)
+![a SandGlass with a contour-printToConsole-animation](./Projects/SandPiles/Renderings/TopDown.mp4)
 
 ![a SandGlass as 3D animation](./Projects/SandPiles/Renderings/SandGlass.mp4)
 
@@ -121,9 +121,9 @@ The used RNG is the MT19937 from `<Random.h>`.
 ### Simulation results
 #### 2D Euclidean lattice
 In this simulation we observe 8E5 random walkers while walking on a 2D euclidean lattice.
-We normalize the resulting histogram of comebacks and draw it in a loglog-scatter-plot against the number of steps.
+We normalize the resulting histogram of comebacks and draw it in a loglog-scatter-printToConsole against the number of steps.
 
-One observes the following plot:
+One observes the following printToConsole:
 
 ![Fit Euclidean 2D](./Projects/Fractals/SimulationResults/Euclidean2D.png)
 
@@ -135,9 +135,9 @@ auto-correlation-times and as a consequence in large systematical errors.
 
 #### 3D Euclidean lattice
 In this simulation we observe 4.6E7 random walkers while walking on a 3D euclidean lattice.
-We normalize the resulting histogram of comebacks and draw it in a loglog-scatter-plot against the number of steps.
+We normalize the resulting histogram of comebacks and draw it in a loglog-scatter-printToConsole against the number of steps.
 
-One observes the following plot:
+One observes the following printToConsole:
 
 ![Fit Euclidean 3D](./Projects/Fractals/SimulationResults/Euclidean3D.png)
 
@@ -147,9 +147,9 @@ systematical errors due to auto-correlations aren't that high. This is a consequ
 #### Bethe lattice
 In this simulation we observe 12.6E6 random walkers while walking on a Bethe-lattice.
 A short description what a Bethe-lattice is can be read on Wikipedia.
-We normalize the resulting histogram of comebacks and draw it in a semi-log-scatter-plot against the number of steps.
+We normalize the resulting histogram of comebacks and draw it in a semi-log-scatter-printToConsole against the number of steps.
 
-One observes the following plot:
+One observes the following printToConsole:
 
 ![Bethe Lattice](./Projects/Fractals/SimulationResults/BetheLattice.png)
 
