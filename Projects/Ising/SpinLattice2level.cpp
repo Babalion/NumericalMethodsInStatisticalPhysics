@@ -4,8 +4,7 @@
 #include "SpinLattice2level.h"
 
 
-
-SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1), sights(sights) {
+SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1),performedSweeps(0), sights(sights) {
     auto dist = std::uniform_int_distribution<int>(0, 1);
     auto rd = std::random_device();
     auto mt = std::mt19937(rd());
@@ -41,18 +40,18 @@ int SpinLattice2level::calcEnergy() const {
 
 int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y) const {
     const int J_val = J;
-    const unsigned int i = y + x * sights;
+    const unsigned int i = x + y * sights;
     int energy = 0;
-    if (i % sights != 0) {// not at left boarder
+    if (x > 0) {// not at left boarder
         energy += spins[i] * spins[i - 1];
     }
-    if (i % (sights - 1) != 0) {// not at right boarder
+    if (x < sights - 1) {// not at right boarder
         energy += spins[i] * spins[i + 1];
     }
-    if (i > sights - 1) {// not at top boarder
+    if (y > 0) {// not at top boarder
         energy += spins[i] * spins[i - sights];
     }
-    if (i < (sights - 1) * (sights - 1) - (sights - 1)) {// not at bottom boarder
+    if (y < sights - 1) {// not at bottom boarder
         energy += spins[i] * spins[i + sights];
     }
 
@@ -60,10 +59,10 @@ int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y) const {
 }
 
 int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) {
-    auto oldSpin = spins[y + x * sights];
-    spins[y + x * sights] = newSpin;
+    auto oldSpin = spins[x + y * sights];
+    spins[x + y * sights] = newSpin;
     auto energy = calcEnergy(x, y);
-    spins[y + x * sights] = oldSpin;
+    spins[x + y * sights] = oldSpin;
 
     return energy;
 }
@@ -84,7 +83,7 @@ void metropolisSweep(SpinLattice2level &spinLattice, float temp) {
             const int oldEnergy = spinLattice.calcEnergy(i, j);
             const int newEnergy = spinLattice.calcEnergy(i, j, newSpin);
 
-            if (newEnergy <= oldEnergy) {
+            if (newEnergy < oldEnergy) {
                 spinLattice(i, j) = newSpin;
             } else {
                 const float rand = u(mt);
@@ -101,23 +100,24 @@ void metropolisSweep(SpinLattice2level &spinLattice, float temp, unsigned int it
     for (size_t i = 0; i < iterations; ++i) {
         metropolisSweep(spinLattice, temp);
     }
+    spinLattice.performedSweeps++;
 }
 
 int heatBathSumOfNeighbours(SpinLattice2level &sl, unsigned int x, unsigned int y) {
     const auto sights = sl.getSights();
     const auto &spins = sl.getSpins();
-    const unsigned int i = y + x * sights;
+    const unsigned int i = x + y * sights;
     int sum = 0;
-    if (i % sights != 0) {// not at left boarder
+    if (x > 0) {// not at left boarder
         sum += spins[i - 1];
     }
-    if (i % (sights - 1) != 0) {// not at right boarder
+    if (x < sl.getSights() - 1) {// not at right boarder
         sum += spins[i + 1];
     }
-    if (i > sights - 1) {// not at top boarder
+    if (y > 0) {// not at top boarder
         sum += spins[i - sights];
     }
-    if (i < (sights - 1) * (sights - 1) - (sights - 1)) {// not at bottom boarder
+    if (y < sl.getSights() - 1) {// not at bottom boarder
         sum += spins[i + sights];
     }
 
@@ -129,11 +129,10 @@ void heatBathSweep(SpinLattice2level &spinLattice, float temp) {
     std::uniform_real_distribution<float> u(0, 1);
     std::random_device rd;
     auto mt = std::mt19937(rd());
-    for (size_t i = 0; i < spinLattice.getSights(); ++i) {
-        for (size_t j = 0; j < spinLattice.getSights(); ++j) {
-            const int thisSpin = spinLattice(i, j);
+    for (size_t i = 0; i < spinLattice.getSights(); i += 1) {
+        for (size_t j = 0; j < spinLattice.getSights(); j += 1) {
             const int delta = heatBathSumOfNeighbours(spinLattice, i, j);
-            const float k = static_cast<float>(J_val * delta + thisSpin) / temp;
+            const float k = static_cast<float>(-1 * J_val * delta) / temp;
             const float q = exp(-1.0f * k) / 2.0f / cosh(k);
             const float r = u(mt);
             if (r < q) {
@@ -143,4 +142,29 @@ void heatBathSweep(SpinLattice2level &spinLattice, float temp) {
             }
         }
     }
+    spinLattice.performedSweeps++;
+}
+
+void heatBathSweepRandChoice(SpinLattice2level &spinLattice, float temp) {
+    const auto J_val = spinLattice.J;
+    std::uniform_real_distribution<float> u(0, 1);
+    std::uniform_int_distribution<unsigned int> loc(0, spinLattice.getSights() - 1);
+    std::random_device rd;
+    auto mt = std::mt19937(rd());
+
+    for (size_t i = 0; i < spinLattice.getSights() * spinLattice.getSights(); i++) {
+        const unsigned int x = loc(mt);
+        const unsigned int y = loc(mt);
+
+        const int delta = heatBathSumOfNeighbours(spinLattice, x, y);
+        const float k = static_cast<float>(-1 * J_val * delta) / temp;
+        const float q = exp(-1.0f * k) / 2.0f / cosh(k);
+        const float r = u(mt);
+        if (r < q) {
+            spinLattice(x, y) = 1;
+        } else {
+            spinLattice(x, y) = -1;
+        }
+    }
+    spinLattice.performedSweeps++;
 }

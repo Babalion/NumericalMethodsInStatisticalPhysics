@@ -44,7 +44,7 @@ set_target_properties(tsp PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DI
 
 file(GLOB isingCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/Ising/*.cpp)
 add_executable(ising ${isingCPPs})
-target_link_libraries(ising ${OpenCV_LIBS} CvPlot)
+target_link_libraries(ising ${OpenCV_LIBS} CvPlot stdc++fs)
 set_target_properties(ising PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 

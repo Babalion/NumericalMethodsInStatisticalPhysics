@@ -21,12 +21,12 @@ public:
 
     int operator()(unsigned int x, unsigned int y) const {
         assert(x < sights && y < sights);
-        return spins[y + x * sights];
+        return spins[x + y * sights];
     }
 
     int &operator()(unsigned int x, unsigned int y) {
         assert(x < sights && y < sights);
-        return spins[y + x * sights];
+        return spins[x + y * sights];
     }
 
     [[nodiscard]] int calcEnergy() const;
@@ -45,6 +45,7 @@ public:
 
     int J;
 
+    unsigned int performedSweeps;
 
 private:
     unsigned int sights;
@@ -55,3 +56,4 @@ void metropolisSweep(SpinLattice2level &spinLattice, float temp);
 void metropolisSweep(SpinLattice2level &spinLattice, float temp, unsigned int iterations);
 
 void heatBathSweep(SpinLattice2level &spinLattice, float temp);
+void heatBathSweepRandChoice(SpinLattice2level &spinLattice, float temp);

@@ -169,8 +169,17 @@ The code from this project is as stub. The working code can be viewed in another
 ### 2 Level System
 You can run a spin-system with N² 2-level spins at a given temperature. You can view the system live via openCV.
 An example is shown here:
-
 ....
+
+We simulated the system with the metropolis-algorithm and the heatbath algorithm.
+We measure the autocorrelation of the resulting energy-series.
+For the Metropolis-algorithm we performed 100 sweeps for each new step n+1.
+For the heatbath-algorithm one sweep corresponds to n+1.
+The correlogram shows impressively how superior the Heatbath-algorithm is to the Metropolis-algorithm if temperature is low.
+Thermalization-process
+If temperature is high, for both algorithms we could not identify statistically significant autocorrelation.
+
+![Correlogram 2level Ising](./Projects/Ising/results/autocorr.png)
 
 ### Sigma-Model
 This is an Ising-Spin-System on a square lattice where every spin can direct in an arbitrary angle in 2D.
