@@ -3,7 +3,11 @@ project(NumerischeMethodenStatistischenPhysik)
 
 find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})
+
 find_package( OpenCV REQUIRED )
+
+find_package(GSL REQUIRED)
+link_libraries(GSL::gsl GSL::gslcblas)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pthread")
@@ -19,7 +23,7 @@ add_subdirectory(lib/cv-plot-1.2.1/CvPlot)
 #https://cmake.org/cmake/help/latest/command/file.html#glob
 file(GLOB HelloWorldCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/HelloWorld/*.cpp)
 add_executable(HelloWorld ${HelloWorldCPPs})
-target_link_libraries(HelloWorld ${ARMADILLO_LIBRARIES})
+target_link_libraries(HelloWorld ${ARMADILLO_LIBRARIES} ${OpenCV_LIBS} CvPlot)
 set_target_properties(HelloWorld PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 file(GLOB RNGTestsCPPs CONFIGURE_DEPENDS  ${PROJECT_SOURCE_DIR}/Projects/RngTests/*.cpp)
