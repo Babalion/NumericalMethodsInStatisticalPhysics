@@ -4,16 +4,8 @@
 #include "SpinLattice2level.h"
 
 
-SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1),performedSweeps(0), sights(sights) {
-    auto dist = std::uniform_int_distribution<int>(0, 1);
-    auto rd = std::random_device();
-    auto mt = std::mt19937(rd());
-
-    spins.reserve(sights * sights);
-    for (unsigned int i = 0; i < sights * sights; i++) {
-        spins[i] = dist(mt) == 0 ? -1 : 1;
-    }
-
+SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1), performedSweeps(0), sights(sights),spins(sights*sights) {
+    initRandom();
 }
 
 void SpinLattice2level::printSpins() {
@@ -26,6 +18,16 @@ void SpinLattice2level::printSpins() {
         }
     }
     std::cout << std::endl;
+}
+
+void SpinLattice2level::initRandom() {
+    auto dist = std::uniform_int_distribution<int>(0, 1);
+    auto rd = std::random_device();
+    auto mt = std::mt19937(rd());
+
+    for (unsigned int i = 0; i < spins.size(); i++) {
+        spins[i] = dist(mt) == 0 ? -1 : 1;
+    }
 }
 
 int SpinLattice2level::calcEnergy() const {
@@ -65,6 +67,18 @@ int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) {
     spins[x + y * sights] = oldSpin;
 
     return energy;
+}
+
+/**
+ *
+ * @return Magnetization, which is the sum over all spins
+ */
+int SpinLattice2level::calcMagnetization() const {
+    int magnet = 0;
+    for (int i = 0; i < spins.size(); ++i) {
+        magnet+=spins[i];
+    }
+    return magnet;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -18,6 +18,9 @@ public:
     // prints a matrix-scheme to the console
     void printSpins();
 
+    // Reinitializes all spins with random values
+    void initRandom();
+
 
     int operator()(unsigned int x, unsigned int y) const {
         assert(x < sights && y < sights);
@@ -34,6 +37,8 @@ public:
     [[nodiscard]] int calcEnergy(unsigned int x, unsigned int y) const;
 
     [[nodiscard]] int calcEnergy(unsigned int x, unsigned int y, int newSpinVal);
+
+    [[nodiscard]] int calcMagnetization() const;
 
     [[nodiscard]] unsigned int getSights() const {
         return sights;

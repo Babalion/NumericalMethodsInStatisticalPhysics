@@ -348,6 +348,22 @@ T mean(const std::vector<T> &vec) {
 }
 
 /**
+ * Calculates the arithmetic mean of given vector-of-vector-of-elements
+ * @tparam T
+ * @param vec vector of vector of elements (tensor of rank 2)
+ * @return the arithmetic mean of all values
+ */
+template<typename T>
+T mean(const std::vector<std::vector<T>> &vec) {
+    std::vector<T> firstMeans;
+    firstMeans.reserve(vec.size());
+    for(auto &i:vec){
+        firstMeans.push_back(mean(i));
+    }
+    return mean(firstMeans);
+}
+
+/**
  * Calculates the standard deviation of given vector-elements
  * @tparam T
  * @param vec
@@ -374,10 +390,10 @@ std::vector<T> autoCorr(const std::vector<T> &vec) {
     float mean = std::accumulate(vec.begin(), vec.end(), 0.0f) / vec.size();
 
     std::vector<float> autocorrelation(vec.size() / 2);
-    for (int t = 0; t < autocorrelation.size(); t++) {
+    for (size_t t = 0; t < autocorrelation.size(); t++) {
         float n = 0; // Numerator
         float d = 0; // Denominator
-        for (int i = 0; i < vec.size() - t; i++) {
+        for (size_t i = 0; i < vec.size() - t; i++) {
             float xim = vec[i] - mean;
             n += xim * (vec[(i + t) % vec.size()] - mean);
             d += xim * xim;
