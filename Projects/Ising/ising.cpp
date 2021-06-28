@@ -6,6 +6,9 @@
 #include <CvPlot/cvplot.h>
 #include "utils.h"
 
+#include <thread>
+
+
 void runTest() {
     SpinLattice2level sl(75);
     // create arrays to save measurements to
@@ -100,6 +103,76 @@ void runTest() {
     cv::waitKey(0);
 }
 
+
+void runWorkTask1Serial(int N, int noOfTemps, float tempStep, int numIterations,
+                        std::vector<float> &temps,
+                        std::vector<std::vector<float>> &magnetization,
+                        std::vector<std::vector<float>> &energy,
+                        SpinLattice2level &sl){
+
+    for (int i = 0; i < noOfTemps; ++i) {
+        temps.push_back(static_cast<float>(i + 1) * tempStep);
+        magnetization[i].reserve(numIterations);
+        for (int j = 0; j < numIterations; ++j) {
+            metropolisSweep(sl, static_cast<float>(temps[i]), 5);
+            magnetization[i].push_back(static_cast<float>(sl.calcMagnetization()) / N / N);
+            energy[i].push_back(static_cast<float>(sl.calcEnergy()) / N / N);
+            if (j > 0 && j % 100 == 0) {
+                sl.initRandom();
+                //thermalize again
+                metropolisSweep(sl, static_cast<float>(temps[i]), 100);
+            }
+        }
+        sl.initRandom();
+        std::cout << "temps: " << temps[i] << std::endl;
+    }
+}
+
+
+/**
+ * does the main work of the simulation parallelized
+ */
+void runWorkTask1(int N, int noOfTemps, float tempStep, int numIterations,
+                  std::vector<float> &temps,
+                  std::vector<std::vector<float>> &magnetization,
+                  std::vector<std::vector<float>> &energy,
+                  SpinLattice2level &sl) {
+
+    // Divide amount of work
+    static const unsigned int hardwareCon = std::thread::hardware_concurrency();
+    static const unsigned int supportedThreads = hardwareCon == 0 ? 2 : hardwareCon;
+
+    static const unsigned int workPerThread = noOfTemps / supportedThreads;
+    static const unsigned int workRemaining = noOfTemps % supportedThreads;
+
+    static unsigned int amountOfThreads;
+    if(workPerThread==0&&workRemaining>0) //we have less work than threads
+        amountOfThreads=workPerThread;
+    else //we have enough work --> use all cores
+        amountOfThreads = supportedThreads;
+    //TODO split up remaining work to all cores, not only the last one
+#ifdef DEBUG
+    std::cout << amountOfThreads << " threads will be used for calculation." << std::endl;
+#endif
+
+
+    std::vector<std::thread> threads(amountOfThreads - 1);
+    for (unsigned int i = 0; i < threads.size(); i++) {
+        threads[i] = std::thread(
+                [&]() { runWorkTask1Serial(); });
+    }
+
+    arrWalkableGraph[amountOfThreads - 1] = new T(filePrefix + std::to_string(amountOfThreads - 1) + ".tsv");
+    arrWalkableGraph[amountOfThreads - 1]->stepsToReturn(iterationsPerThread, maxSteps);
+
+    for (auto &i : threads) {
+        i.join();
+    }
+
+
+
+}
+
 /** TASK 1:
  *
  * Simulate Systems with sight-size 128,256,512,1024
@@ -114,16 +187,16 @@ void runTest() {
  */
 void runTask1() {
     const int N = 128;// number of spins at quadratic sight
-    const int maxTemp = 20;
-    const int noOfTemps = 20;
-    const int tempStep = maxTemp / noOfTemps;
-    const int numIterations = 100;
+    const float maxTemp = 6;
+    const int noOfTemps = 30;
+    const float tempStep = maxTemp / noOfTemps;
+    const int numIterations = 1000;
 
 
     //Create the ising-field
     SpinLattice2level sl(N);
     // create vectors to save measurements to
-    std::vector<int> temps;
+    std::vector<float> temps;
     temps.reserve(noOfTemps);
     std::vector<std::vector<float>> energy(noOfTemps);
     std::vector<std::vector<float>> magnetization(noOfTemps);
@@ -131,12 +204,17 @@ void runTask1() {
 
     /// Start simulation
     for (int i = 0; i < noOfTemps; ++i) {
-        temps.push_back(i * tempStep);
+        temps.push_back(static_cast<float>(i + 1) * tempStep);
         magnetization[i].reserve(numIterations);
         for (int j = 0; j < numIterations; ++j) {
-            metropolisSweep(sl, static_cast<float>(temps[i]), 10);
+            metropolisSweep(sl, static_cast<float>(temps[i]), 5);
             magnetization[i].push_back(static_cast<float>(sl.calcMagnetization()) / N / N);
             energy[i].push_back(static_cast<float>(sl.calcEnergy()) / N / N);
+            if (j > 0 && j % 100 == 0) {
+                sl.initRandom();
+                //thermalize again
+                metropolisSweep(sl, static_cast<float>(temps[i]), 100);
+            }
         }
         sl.initRandom();
         std::cout << "temps: " << temps[i] << std::endl;
@@ -146,15 +224,25 @@ void runTask1() {
     /// Plot and calculate measured parameters
     /// ---------------------------------------------------------------------------------------------------------------
 
-    auto axes = CvPlot::makePlotAxes();
+    auto axesMagnetization = CvPlot::makePlotAxes();
     for (size_t i = 0; i < noOfTemps; ++i) {
-        std::vector<int> x(magnetization[i].size());
+        std::vector<float> x(magnetization[i].size());
         std::fill(x.begin(), x.end(), temps[i]);
-        axes.create<CvPlot::Series>(x, magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
+        axesMagnetization.create<CvPlot::Series>(x, magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
     }
-    axes.xLabel("temperature T").yLabel("magnetization m");
-    axes.title("magnetization vs temperature");
-    CvPlot::show("magnetization", axes);
+    axesMagnetization.xLabel("temperature T").yLabel("magnetization m");
+    axesMagnetization.title("magnetization vs temperature");
+    CvPlot::show("magnetization", axesMagnetization);
+
+    auto axesEnergy = CvPlot::makePlotAxes();
+    for (size_t i = 0; i < noOfTemps; ++i) {
+        std::vector<float> x(magnetization[i].size());
+        std::fill(x.begin(), x.end(), temps[i]);
+        axesEnergy.create<CvPlot::Series>(x, magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
+    }
+    axesEnergy.xLabel("temperature T").yLabel("energy E");
+    axesEnergy.title("energy vs temperature");
+    CvPlot::show("energy", axesEnergy);
 }
 
 int main() {
