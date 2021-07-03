@@ -4,7 +4,8 @@
 #include "SpinLattice2level.h"
 
 
-SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1), performedSweeps(0), sights(sights),spins(sights*sights) {
+SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1), performedSweeps(0), sights(sights),
+                                                            spins(sights * sights) {
     initRandom();
 }
 
@@ -25,8 +26,8 @@ void SpinLattice2level::initRandom() {
     auto rd = std::random_device();
     auto mt = std::mt19937(rd());
 
-    for (unsigned int i = 0; i < spins.size(); i++) {
-        spins[i] = dist(mt) == 0 ? -1 : 1;
+    for (int & spin : spins) {
+        spin = dist(mt) == 0 ? -1 : 1;
     }
 }
 
@@ -41,32 +42,27 @@ int SpinLattice2level::calcEnergy() const {
 }
 
 int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y) const {
+    return calcEnergy(x, y, spins[x + y * sights]);
+}
+
+int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) const {
     const int J_val = J;
     const unsigned int i = x + y * sights;
     int energy = 0;
     if (x > 0) {// not at left boarder
-        energy += spins[i] * spins[i - 1];
+        energy += newSpin * spins[i - 1];
     }
     if (x < sights - 1) {// not at right boarder
-        energy += spins[i] * spins[i + 1];
+        energy += newSpin * spins[i + 1];
     }
     if (y > 0) {// not at top boarder
-        energy += spins[i] * spins[i - sights];
+        energy += newSpin * spins[i - sights];
     }
     if (y < sights - 1) {// not at bottom boarder
-        energy += spins[i] * spins[i + sights];
+        energy += newSpin * spins[i + sights];
     }
 
     return -1 * J_val * energy;
-}
-
-int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) {
-    auto oldSpin = spins[x + y * sights];
-    spins[x + y * sights] = newSpin;
-    auto energy = calcEnergy(x, y);
-    spins[x + y * sights] = oldSpin;
-
-    return energy;
 }
 
 /**
@@ -76,7 +72,7 @@ int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) {
 int SpinLattice2level::calcMagnetization() const {
     int magnet = 0;
     for (int i = 0; i < spins.size(); ++i) {
-        magnet+=spins[i];
+        magnet += spins[i];
     }
     return magnet;
 }

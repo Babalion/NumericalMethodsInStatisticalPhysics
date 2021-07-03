@@ -36,7 +36,7 @@ public:
 
     [[nodiscard]] int calcEnergy(unsigned int x, unsigned int y) const;
 
-    [[nodiscard]] int calcEnergy(unsigned int x, unsigned int y, int newSpinVal);
+    [[nodiscard]] int calcEnergy(unsigned int x, unsigned int y, int newSpinVal) const;
 
     [[nodiscard]] int calcMagnetization() const;
 
