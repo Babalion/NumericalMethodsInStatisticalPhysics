@@ -5,7 +5,12 @@
 
 
 SpinLattice2level::SpinLattice2level(unsigned int sights) : J(1), performedSweeps(0), sights(sights),
-                                                            spins(sights * sights) {
+                                                            spins(sights * sights), h(0) {
+    initRandom();
+}
+
+SpinLattice2level::SpinLattice2level(unsigned int sights, int h) : J(1), performedSweeps(0), sights(sights),
+                                                                     spins(sights * sights), h(h) {
     initRandom();
 }
 
@@ -26,7 +31,7 @@ void SpinLattice2level::initRandom() {
     auto rd = std::random_device();
     auto mt = std::mt19937(rd());
 
-    for (int & spin : spins) {
+    for (int &spin : spins) {
         spin = dist(mt) == 0 ? -1 : 1;
     }
 }
@@ -50,16 +55,16 @@ int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) c
     const unsigned int i = x + y * sights;
     int energy = 0;
     if (x > 0) {// not at left boarder
-        energy += newSpin * spins[i - 1];
+        energy += newSpin * (spins[i - 1]+h);
     }
     if (x < sights - 1) {// not at right boarder
-        energy += newSpin * spins[i + 1];
+        energy += newSpin * (spins[i + 1]+h);
     }
     if (y > 0) {// not at top boarder
-        energy += newSpin * spins[i - sights];
+        energy += newSpin * (spins[i - sights]+h);
     }
     if (y < sights - 1) {// not at bottom boarder
-        energy += newSpin * spins[i + sights];
+        energy += newSpin * (spins[i + sights]+h);
     }
 
     return -1 * J_val * energy;
@@ -71,10 +76,18 @@ int SpinLattice2level::calcEnergy(unsigned int x, unsigned int y, int newSpin) c
  */
 int SpinLattice2level::calcMagnetization() const {
     int magnet = 0;
-    for (int i = 0; i < spins.size(); ++i) {
-        magnet += spins[i];
+    for (const int &spin : spins) {
+        magnet += spin;
     }
     return magnet;
+}
+
+float SpinLattice2level::calcSusceptibility() const {
+    return static_cast<float>(calcMagnetization())/static_cast<float>(h);
+}
+
+int SpinLattice2level::calcHeatCapacity() const {
+    return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

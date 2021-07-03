@@ -7,18 +7,29 @@
 #include <random>
 #include <iostream>
 #include <cassert>
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp>
 
 // a quadratic 2-level ising-lattice
 class SpinLattice2level {
 public:
+    /**
+     * initialize an ising-lattice with sights² spins and no external magnetic field
+     * @param sights length of the quadratic lattice
+     */
     explicit SpinLattice2level(unsigned int sights);
+
+    /**
+     * initialize an ising-lattice with sights² spins and extern magnetic field h
+     * @param sights length of the quadratic lattice
+     * @param h strength of extern magnetic field
+     */
+    explicit SpinLattice2level(unsigned int sights, int h);
 
 
     // prints a matrix-scheme to the console
     void printSpins();
 
-    // Reinitializes all spins with random values
+    // Reinitialize all spins with random values
     void initRandom();
 
 
@@ -40,6 +51,11 @@ public:
 
     [[nodiscard]] int calcMagnetization() const;
 
+    [[nodiscard]] float calcSusceptibility() const;
+
+    [[nodiscard]] int calcHeatCapacity() const;
+
+
     [[nodiscard]] unsigned int getSights() const {
         return sights;
     }
@@ -55,6 +71,7 @@ public:
 private:
     unsigned int sights;
     std::vector<int> spins;
+    int h;
 };
 
 void metropolisSweep(SpinLattice2level &spinLattice, float temp);
