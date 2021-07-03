@@ -7,8 +7,9 @@
 #include "utils.h"
 
 #include <thread>
+#include <utility>
 
-
+#ifdef DEBUG
 void runTest() {
     SpinLattice2level sl(75);
     // create arrays to save measurements to
@@ -102,29 +103,70 @@ void runTest() {
 
     cv::waitKey(0);
 }
+#endif
 
+struct workerTask1 {
+    workerTask1(int N, int noOfTemps, float tempStep, int numIterations)
+            : N(N), noOfTemps(noOfTemps), numIterations(numIterations),
+              magnetization(noOfTemps), energy(noOfTemps), susceptibility(noOfTemps),
+              heatCapacity(noOfTemps) {
+        for (int i = 0; i < noOfTemps; ++i) {
+            // calculate temperatures
+            temps.push_back(static_cast<float>(i+1) * tempStep);
 
-void runWorkTask1Serial(int N, int noOfTemps, float tempStep, int numIterations,
-                        std::vector<float> &temps,
-                        std::vector<std::vector<float>> &magnetization,
-                        std::vector<std::vector<float>> &energy,
-                        SpinLattice2level &sl){
+            // reserve memory for all vectors
+            magnetization[i].reserve(numIterations);
+            energy[i].reserve(numIterations);
+            susceptibility[i].reserve(numIterations);
+            heatCapacity[i].reserve(numIterations);
+        }
+    };
+    const int N;
+    //const int startTemp{};
+    const int noOfTemps;
+    //const float tempStep{};
+    const int numIterations;
+    std::vector<std::vector<float>> magnetization;
+    std::vector<std::vector<float>> energy;
+    std::vector<std::vector<float>> susceptibility;
+    std::vector<std::vector<float>> heatCapacity;
+    std::vector<SpinLattice2level> sl; //this is later the number of parallel ensembles (--> number of threads)
+    [[nodiscard]] const std::vector<float> &getTemps() const {
+        return temps;
+    }
 
-    for (int i = 0; i < noOfTemps; ++i) {
-        temps.push_back(static_cast<float>(i + 1) * tempStep);
-        magnetization[i].reserve(numIterations);
-        for (int j = 0; j < numIterations; ++j) {
-            metropolisSweep(sl, static_cast<float>(temps[i]), 5);
-            magnetization[i].push_back(static_cast<float>(sl.calcMagnetization()) / N / N);
-            energy[i].push_back(static_cast<float>(sl.calcEnergy()) / N / N);
+private:
+    std::vector<float> temps;
+};
+
+/**
+ * Calculates wk.energy etc. for given indices as sequential job.
+ * This is a helper class for the parallel function see below.
+ *
+ * @param wk all data of all parallel ensembles
+ * @param tempsToCalc the indices of wk.temp which should be calculated in this thread
+ * @param threadId consecutive number for each thread
+ */
+void runWorkTask1Serial(workerTask1 &wk, const std::vector<unsigned int> &tempsToCalc, unsigned int threadId) {
+    //thermalize first
+    metropolisSweep(wk.sl[threadId], static_cast<float>(wk.getTemps()[0]), 100);
+    for (auto &i:tempsToCalc) {
+        wk.magnetization[i].reserve(wk.numIterations);
+        for (int j = 0; j < wk.numIterations; ++j) {
+            metropolisSweep(wk.sl[threadId], static_cast<float>(wk.getTemps()[i]), 5);
+            wk.magnetization[i].push_back(
+                    static_cast<float>(wk.sl[threadId].calcMagnetization()) / static_cast<float>(wk.N * wk.N));
+            wk.energy[i].push_back(static_cast<float>(wk.sl[threadId].calcEnergy()) / static_cast<float>(wk.N * wk.N));
             if (j > 0 && j % 100 == 0) {
-                sl.initRandom();
+                wk.sl[threadId].initRandom();
                 //thermalize again
-                metropolisSweep(sl, static_cast<float>(temps[i]), 100);
+                metropolisSweep(wk.sl[threadId], static_cast<float>(wk.getTemps()[i]), 100);
             }
         }
-        sl.initRandom();
-        std::cout << "temps: " << temps[i] << std::endl;
+        wk.sl[threadId].initRandom();
+#ifdef DEBUG
+        std::cout << "done temp " << wk.temps[i] <<" in thread " <<threadId<< std::endl;
+#endif
     }
 }
 
@@ -132,22 +174,18 @@ void runWorkTask1Serial(int N, int noOfTemps, float tempStep, int numIterations,
 /**
  * does the main work of the simulation parallelized
  */
-void runWorkTask1(int N, int noOfTemps, float tempStep, int numIterations,
-                  std::vector<float> &temps,
-                  std::vector<std::vector<float>> &magnetization,
-                  std::vector<std::vector<float>> &energy,
-                  SpinLattice2level &sl) {
+void runWorkTask1(workerTask1 &wk) {
 
     // Divide amount of work
     static const unsigned int hardwareCon = std::thread::hardware_concurrency();
     static const unsigned int supportedThreads = hardwareCon == 0 ? 2 : hardwareCon;
 
-    static const unsigned int workPerThread = noOfTemps / supportedThreads;
-    static const unsigned int workRemaining = noOfTemps % supportedThreads;
+    static const unsigned int workPerThread = wk.noOfTemps / supportedThreads;
+    static const unsigned int workRemaining = wk.noOfTemps % supportedThreads;
 
     static unsigned int amountOfThreads;
-    if(workPerThread==0&&workRemaining>0) //we have less work than threads
-        amountOfThreads=workPerThread;
+    if (workPerThread == 0 && workRemaining > 0) //we have less work than threads
+        amountOfThreads = wk.noOfTemps;
     else //we have enough work --> use all cores
         amountOfThreads = supportedThreads;
     //TODO split up remaining work to all cores, not only the last one
@@ -155,20 +193,40 @@ void runWorkTask1(int N, int noOfTemps, float tempStep, int numIterations,
     std::cout << amountOfThreads << " threads will be used for calculation." << std::endl;
 #endif
 
+    /// Create now data structure to divide and store work
 
-    std::vector<std::thread> threads(amountOfThreads - 1);
-    for (unsigned int i = 0; i < threads.size(); i++) {
-        threads[i] = std::thread(
-                [&]() { runWorkTask1Serial(); });
+    // initialize different ensembles
+    for (unsigned int i = 0; i < amountOfThreads; ++i) {
+        wk.sl.emplace_back(wk.N);
     }
 
-    arrWalkableGraph[amountOfThreads - 1] = new T(filePrefix + std::to_string(amountOfThreads - 1) + ".tsv");
-    arrWalkableGraph[amountOfThreads - 1]->stepsToReturn(iterationsPerThread, maxSteps);
+    // calc to do temperature indices for every thread and one for the potential rest
+    std::vector<std::vector<unsigned int>> tempIndices(amountOfThreads + 1);
+    for (unsigned int i = 0; i < amountOfThreads + 1; ++i) {
+        if (i == amountOfThreads) {
+            for (unsigned int j = 0; j < workRemaining; ++j) {
+                tempIndices[i].push_back(i * workPerThread + j);
+            }
+        } else {
+            for (unsigned int j = 0; j < workPerThread; ++j) {
+                tempIndices[i].push_back(i * workPerThread + j);
+            }
+        }
+    }
+
+    //start thread
+    std::vector<std::thread> threads(amountOfThreads - 1);
+    for (unsigned int i = 0; i < amountOfThreads - 1; i++) {
+        threads[i] = std::thread([&wk, &tempIndices, i]() { runWorkTask1Serial(wk, tempIndices[i], i); });
+    }
+
+    runWorkTask1Serial(wk, tempIndices[amountOfThreads - 1], amountOfThreads - 1);
+    // do the remaining work
+    runWorkTask1Serial(wk, tempIndices[amountOfThreads], amountOfThreads - 1);
 
     for (auto &i : threads) {
         i.join();
     }
-
 
 
 }
@@ -180,7 +238,7 @@ void runWorkTask1(int N, int noOfTemps, float tempStep, int numIterations,
  *  -energy E(T)
  *  -magnetization m(T)
  *  -heat capacity C(T)
- *  -optional: susceptibility chi(T)
+ *  -susceptibility chi(T)
  *
  *  We need at least 1E4 measurements per temperature
  *  Calculate the autocorrelations
@@ -188,37 +246,25 @@ void runWorkTask1(int N, int noOfTemps, float tempStep, int numIterations,
 void runTask1() {
     const int N = 128;// number of spins at quadratic sight
     const float maxTemp = 6;
-    const int noOfTemps = 30;
+    const int noOfTemps = 40;
     const float tempStep = maxTemp / noOfTemps;
-    const int numIterations = 1000;
+    const int numIterations = 400;
 
 
-    //Create the ising-field
-    SpinLattice2level sl(N);
-    // create vectors to save measurements to
-    std::vector<float> temps;
-    temps.reserve(noOfTemps);
-    std::vector<std::vector<float>> energy(noOfTemps);
-    std::vector<std::vector<float>> magnetization(noOfTemps);
-
+    workerTask1 wk0(64, noOfTemps, tempStep, numIterations);
+    workerTask1 wk1(128, noOfTemps, tempStep, numIterations);
+    workerTask1 wk2(256, noOfTemps, tempStep, numIterations);
+    workerTask1 wk3(512, noOfTemps, tempStep, numIterations);
 
     /// Start simulation
-    for (int i = 0; i < noOfTemps; ++i) {
-        temps.push_back(static_cast<float>(i + 1) * tempStep);
-        magnetization[i].reserve(numIterations);
-        for (int j = 0; j < numIterations; ++j) {
-            metropolisSweep(sl, static_cast<float>(temps[i]), 5);
-            magnetization[i].push_back(static_cast<float>(sl.calcMagnetization()) / N / N);
-            energy[i].push_back(static_cast<float>(sl.calcEnergy()) / N / N);
-            if (j > 0 && j % 100 == 0) {
-                sl.initRandom();
-                //thermalize again
-                metropolisSweep(sl, static_cast<float>(temps[i]), 100);
-            }
-        }
-        sl.initRandom();
-        std::cout << "temps: " << temps[i] << std::endl;
-    }
+    std::cout<<"Simulating now N=64\n";
+    runWorkTask1(wk0);
+    std::cout<<"Simulating now N=128\n";
+    runWorkTask1(wk1);
+    std::cout<<"Simulating now N=256\n";
+    runWorkTask1(wk2);
+    std::cout<<"Simulating now N=512\n";
+    runWorkTask1(wk3);
 
     /// ---------------------------------------------------------------------------------------------------------------
     /// Plot and calculate measured parameters
@@ -226,9 +272,12 @@ void runTask1() {
 
     auto axesMagnetization = CvPlot::makePlotAxes();
     for (size_t i = 0; i < noOfTemps; ++i) {
-        std::vector<float> x(magnetization[i].size());
-        std::fill(x.begin(), x.end(), temps[i]);
-        axesMagnetization.create<CvPlot::Series>(x, magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
+        std::vector<float> x(wk0.magnetization[i].size());
+        std::fill(x.begin(), x.end(), wk0.getTemps()[i]);
+        axesMagnetization.create<CvPlot::Series>(x, wk0.magnetization[i], "-r").setLineSpec("o").setMarkerSize(2);
+        axesMagnetization.create<CvPlot::Series>(x, wk1.magnetization[i], "-g").setLineSpec("o").setMarkerSize(2);
+        axesMagnetization.create<CvPlot::Series>(x, wk2.magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
+        axesMagnetization.create<CvPlot::Series>(x, wk3.magnetization[i], "-c").setLineSpec("o").setMarkerSize(2);
     }
     axesMagnetization.xLabel("temperature T").yLabel("magnetization m");
     axesMagnetization.title("magnetization vs temperature");
@@ -236,9 +285,12 @@ void runTask1() {
 
     auto axesEnergy = CvPlot::makePlotAxes();
     for (size_t i = 0; i < noOfTemps; ++i) {
-        std::vector<float> x(magnetization[i].size());
-        std::fill(x.begin(), x.end(), temps[i]);
-        axesEnergy.create<CvPlot::Series>(x, magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
+        std::vector<float> x(wk0.energy[i].size());
+        std::fill(x.begin(), x.end(), wk0.getTemps()[i]);
+        axesEnergy.create<CvPlot::Series>(x, wk0.energy[i], "-r").setLineSpec("o").setMarkerSize(2);
+        axesEnergy.create<CvPlot::Series>(x, wk1.energy[i], "-g").setLineSpec("o").setMarkerSize(2);
+        axesEnergy.create<CvPlot::Series>(x, wk2.energy[i], "-b").setLineSpec("o").setMarkerSize(2);
+        axesEnergy.create<CvPlot::Series>(x, wk3.energy[i], "-c").setLineSpec("o").setMarkerSize(2);
     }
     axesEnergy.xLabel("temperature T").yLabel("energy E");
     axesEnergy.title("energy vs temperature");
