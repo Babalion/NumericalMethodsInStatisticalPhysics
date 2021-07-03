@@ -6,6 +6,7 @@
 #include <CvPlot/cvplot.h>
 #include "utils.h"
 
+#include <fstream>
 #include <thread>
 #include <utility>
 
@@ -112,7 +113,7 @@ struct workerTask1 {
               heatCapacity(noOfTemps) {
         for (int i = 0; i < noOfTemps; ++i) {
             // calculate temperatures
-            temps.push_back(static_cast<float>(i+1) * tempStep);
+            temps.push_back(static_cast<float>(i + 1) * tempStep);
 
             // reserve memory for all vectors
             magnetization[i].reserve(numIterations);
@@ -244,27 +245,25 @@ void runWorkTask1(workerTask1 &wk) {
  *  Calculate the autocorrelations
  */
 void runTask1() {
-    const int N = 128;// number of spins at quadratic sight
     const float maxTemp = 6;
-    const int noOfTemps = 40;
+    const int noOfTemps = 16;
     const float tempStep = maxTemp / noOfTemps;
-    const int numIterations = 400;
+    const int numIterations = 100;
 
-
-    workerTask1 wk0(64, noOfTemps, tempStep, numIterations);
-    workerTask1 wk1(128, noOfTemps, tempStep, numIterations);
-    workerTask1 wk2(256, noOfTemps, tempStep, numIterations);
-    workerTask1 wk3(512, noOfTemps, tempStep, numIterations);
+    std::vector<workerTask1> wk = {workerTask1(64, noOfTemps, tempStep, numIterations),
+                                   workerTask1(128, noOfTemps, tempStep, numIterations),
+                                   workerTask1(8, noOfTemps, tempStep, numIterations),
+                                   workerTask1(4, noOfTemps, tempStep, numIterations)};
 
     /// Start simulation
-    std::cout<<"Simulating now N=64\n";
-    runWorkTask1(wk0);
-    std::cout<<"Simulating now N=128\n";
-    runWorkTask1(wk1);
-    std::cout<<"Simulating now N=256\n";
-    runWorkTask1(wk2);
-    std::cout<<"Simulating now N=512\n";
-    runWorkTask1(wk3);
+    std::cout << "Simulating now N=64\n";
+    runWorkTask1(wk[0]);
+    std::cout << "Simulating now N=128\n";
+    runWorkTask1(wk[1]);
+    std::cout << "Simulating now N=256\n";
+    runWorkTask1(wk[2]);
+    std::cout << "Simulating now N=512\n";
+    runWorkTask1(wk[3]);
 
     /// ---------------------------------------------------------------------------------------------------------------
     /// Plot and calculate measured parameters
@@ -272,12 +271,12 @@ void runTask1() {
 
     auto axesMagnetization = CvPlot::makePlotAxes();
     for (size_t i = 0; i < noOfTemps; ++i) {
-        std::vector<float> x(wk0.magnetization[i].size());
-        std::fill(x.begin(), x.end(), wk0.getTemps()[i]);
-        axesMagnetization.create<CvPlot::Series>(x, wk0.magnetization[i], "-r").setLineSpec("o").setMarkerSize(2);
-        axesMagnetization.create<CvPlot::Series>(x, wk1.magnetization[i], "-g").setLineSpec("o").setMarkerSize(2);
-        axesMagnetization.create<CvPlot::Series>(x, wk2.magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
-        axesMagnetization.create<CvPlot::Series>(x, wk3.magnetization[i], "-c").setLineSpec("o").setMarkerSize(2);
+        std::vector<float> x(wk[0].magnetization[i].size());
+        std::fill(x.begin(), x.end(), wk[0].getTemps()[i]);
+        axesMagnetization.create<CvPlot::Series>(x, wk[0].magnetization[i], "-r").setLineSpec("o").setMarkerSize(2);
+        axesMagnetization.create<CvPlot::Series>(x, wk[1].magnetization[i], "-g").setLineSpec("o").setMarkerSize(2);
+        axesMagnetization.create<CvPlot::Series>(x, wk[2].magnetization[i], "-b").setLineSpec("o").setMarkerSize(2);
+        axesMagnetization.create<CvPlot::Series>(x, wk[3].magnetization[i], "-c").setLineSpec("o").setMarkerSize(2);
     }
     axesMagnetization.xLabel("temperature T").yLabel("magnetization m");
     axesMagnetization.title("magnetization vs temperature");
@@ -285,16 +284,38 @@ void runTask1() {
 
     auto axesEnergy = CvPlot::makePlotAxes();
     for (size_t i = 0; i < noOfTemps; ++i) {
-        std::vector<float> x(wk0.energy[i].size());
-        std::fill(x.begin(), x.end(), wk0.getTemps()[i]);
-        axesEnergy.create<CvPlot::Series>(x, wk0.energy[i], "-r").setLineSpec("o").setMarkerSize(2);
-        axesEnergy.create<CvPlot::Series>(x, wk1.energy[i], "-g").setLineSpec("o").setMarkerSize(2);
-        axesEnergy.create<CvPlot::Series>(x, wk2.energy[i], "-b").setLineSpec("o").setMarkerSize(2);
-        axesEnergy.create<CvPlot::Series>(x, wk3.energy[i], "-c").setLineSpec("o").setMarkerSize(2);
+        std::vector<float> x(wk[0].energy[i].size());
+        std::fill(x.begin(), x.end(), wk[0].getTemps()[i]);
+        axesEnergy.create<CvPlot::Series>(x, wk[0].energy[i], "-r").setLineSpec("o").setMarkerSize(2);
+        axesEnergy.create<CvPlot::Series>(x, wk[1].energy[i], "-g").setLineSpec("o").setMarkerSize(2);
+        axesEnergy.create<CvPlot::Series>(x, wk[2].energy[i], "-b").setLineSpec("o").setMarkerSize(2);
+        axesEnergy.create<CvPlot::Series>(x, wk[3].energy[i], "-c").setLineSpec("o").setMarkerSize(2);
     }
     axesEnergy.xLabel("temperature T").yLabel("energy E");
     axesEnergy.title("energy vs temperature");
     CvPlot::show("energy", axesEnergy);
+
+    /// ---------------------------------------------------------------------------------------------------------------
+    /// Save measurements to file
+    /// ---------------------------------------------------------------------------------------------------------------
+
+    std::cout << "Simulation finished. Save results now...\n";
+    std::ofstream file("IsingResults.tsv");
+    file << "N\ttemp\tmagnetization\tenergy\tsusceptibility\theatCapacity\n";
+    file<<std::fixed;
+    file.precision(5);
+    for (auto &w:wk) {
+        for (int i = 0; i < w.noOfTemps; ++i) {
+            for (int j = 0; j < w.numIterations; ++j) {
+                file << w.N << "\t" << w.getTemps()[i] << "\t"
+                     << w.magnetization[i][j] << "\t" << w.energy[i][j]<<"\n";
+                    // << "\t" << w.susceptibility[i][j] << "\t" << w.heatCapacity[i][j] << "\n";
+            }
+        }
+    }
+    file.close();
+
+
 }
 
 int main() {
