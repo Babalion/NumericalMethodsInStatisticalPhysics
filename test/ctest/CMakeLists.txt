@@ -49,3 +49,10 @@ add_executable(ctest_exe_testConfiguration testConfiguration.cpp ${ProjectsPath}
 add_test(ctest_exe_testConfiguration ctest_exe_testConfiguration)
 target_link_libraries(ctest_exe_testConfiguration ${ARMADILLO_LIBRARIES})
 set_target_properties(ctest_exe_testConfiguration PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+#-----------------------------------------------------------------------------------------------------------------------
+#-------------TEST-OF: Ising -------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
+add_executable(ctest_exe_testIsing testIsing.cpp ${ProjectsPath}/SandPiles/Cell.cpp ${ProjectsPath}/Ising/SpinLattice2level.cpp)
+add_test(ctest_exe_testIsing ctest_exe_testIsing)
+target_link_libraries(ctest_exe_testIsing)
+set_target_properties(ctest_exe_testIsing PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")

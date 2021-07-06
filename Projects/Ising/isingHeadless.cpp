@@ -16,42 +16,43 @@
  *  Calculate the autocorrelations
  */
 void runTask1() {
-    const float maxTemp = 6;
-    const int noOfTemps = 12;
-    const float tempStep = maxTemp / noOfTemps;
-    const int numIterations = 500;
+    const float minTemp = 1;
+    const float maxTemp = 4;
+    const int numOfTemps = 2;
+    const int numIterations = 100;
+    const unsigned int shuffleAgainAfter = 50;
+/*
+    std::vector<workerTask1> wk = {workerTask1(64, 0, numOfTemps, minTemp, maxTemp, numOfIterations, shuffleAgainAfter),
+                                   workerTask1(128, 0, numOfTemps, minTemp, maxTemp, numOfIterations, shuffleAgainAfter),
+                                   workerTask1(256, 0, numOfTemps, minTemp, maxTemp, numOfIterations, shuffleAgainAfter),
+                                   workerTask1(512, 0, numOfTemps, minTemp, maxTemp, numOfIterations, shuffleAgainAfter),
+                                   workerTask1(1024, 0, numOfTemps, minTemp, maxTemp, numOfIterations, shuffleAgainAfter)};
+*/
+    std::vector<Simulation> Sims = {Simulation(10, numOfTemps, minTemp, maxTemp, numIterations, shuffleAgainAfter),
+                                    Simulation(11, numOfTemps, minTemp, maxTemp, numIterations, shuffleAgainAfter),
+                                    Simulation(12, numOfTemps, minTemp, maxTemp, numIterations, shuffleAgainAfter),
+                                    Simulation(20, numOfTemps, minTemp, maxTemp, numIterations, shuffleAgainAfter),
+                                    Simulation(35, numOfTemps, minTemp, maxTemp, numIterations, shuffleAgainAfter)};
 
-    std::vector<workerTask1> wk = {workerTask1(64, noOfTemps, tempStep, numIterations),
-                                   workerTask1(128, noOfTemps, tempStep, numIterations),
-                                   workerTask1(40, noOfTemps, tempStep, numIterations),
-                                   workerTask1(20, noOfTemps, tempStep, numIterations)};
-
-    /// Start simulation
-    for (auto &w:wk) {
-        std::cout << "Simulating now N="<<w.N<<"\n";
-        runWorkTask1(w);
-    }
-
-    /// ---------------------------------------------------------------------------------------------------------------
-    /// Save measurements to file
-    /// ---------------------------------------------------------------------------------------------------------------
-
-    std::cout << "Simulation finished. Save results now...\n";
     std::ofstream file("IsingResults.tsv");
-    file<<"numOfTemps:\t"<<noOfTemps<<std::endl;
-    file<<"numOfIterations:\t"<<numIterations<<std::endl<<std::endl;
+    file << "numOfTemps:\t" << numOfTemps << std::endl;
+    file << "numOfIterations:\t" << numIterations << std::endl << std::endl;
     file << "N\ttemp\tmagnetization\tenergy\tsusceptibility\theatCapacity\n";
     file << std::fixed;
     file.precision(5);
-    for (auto &w:wk) {
-        for (int i = 0; i < w.noOfTemps; ++i) {
-            for (int j = 0; j < w.numIterations; ++j) {
-                file << w.N << "\t" << w.getTemps()[i] << "\t"
-                     << w.magnetization[i][j] << "\t" << w.energy[i][j]
-                     << "\t" << w.susceptibility[i][j] << "\t" << w.heatCapacity[i][j] << "\n";
-            }
+    for (auto &S:Sims) {
+        std::cout << "Simulating now N=" << S.getSights() << "\n";
+        S.simulate_seq();
+        std::cout << "Simulation finished. Save results now...\n";
+
+        /// Save measurements to file
+        for (size_t i = 0; i < S.getNumOfTemps() * S.getNumIterations(); ++i) {
+            file << S.getSights() << "\t" << S.getTemps()[i] << "\t"
+                 << S.getMagnetization()[i] << "\t" << S.getEnergies()[i]
+                 << "\t" << S.getSusceptibility()[i] << "\t" << S.getHeatCapacity()[i] << "\n";
         }
     }
+
     file.close();
 
 

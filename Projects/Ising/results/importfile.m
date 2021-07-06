@@ -39,4 +39,9 @@ magnetization = tbl.magnetization;
 energy = tbl.energy;
 susceptibility = tbl.susceptibility;
 heatCapacity = tbl.heatCapacity;
+
+%% Post Process Data
+%energy=energy/4+1;%normalize energy to [0,1]
+%magnetization=abs(magnetization);% magnetization of either spin-directions are symmetric
+
 end

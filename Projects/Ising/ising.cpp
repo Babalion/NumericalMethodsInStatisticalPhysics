@@ -120,7 +120,7 @@ void runTest() {
  */
 void runTask1() {
     const float maxTemp = 6;
-    const int noOfTemps = 12;
+    const int noOfTemps = 16;
     const float tempStep = maxTemp / noOfTemps;
     const int numIterations = 500;
 
@@ -176,7 +176,7 @@ void runTask1() {
     file.precision(5);
     for (auto &w:wk) {
         for (int i = 0; i < w.noOfTemps; ++i) {
-            for (int j = 0; j < w.numIterations; ++j) {
+            for (int j = 0; j < w.numOfIterations; ++j) {
                 file << w.N << "\t" << w.getTemps()[i] << "\t"
                      << w.magnetization[i][j] << "\t" << w.energy[i][j]
                      << "\t" << w.susceptibility[i][j] << "\t" << w.heatCapacity[i][j] << "\n";
