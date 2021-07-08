@@ -1,4 +1,4 @@
-function [O_mean,O_std,O_var,O_weight,O_corrLength] = ReduceObservable(O_data,temp)
+function [O_mean,O_std,O_var,O_var_err,O_weight,O_corrLength] = ReduceObservable(O_data,temp)
 
 [C,ia,~]=unique(temp);
 numOfTemps=length(C);
@@ -7,13 +7,19 @@ numOfTemps=length(C);
 O_mean=zeros([numOfTemps,1]);
 O_std=zeros([numOfTemps,1]);
 O_var=zeros([numOfTemps,1]);
+O_var_err=zeros([numOfTemps,1]);
 O_corrLength=zeros([numOfTemps,1]);
 
 ia(end+1)=length(temp);
 for i=1:numOfTemps
-    O_mean(i)=mean(O_data(ia(i):ia(i+1)));
-    O_std(i)=std(O_data(ia(i):ia(i+1)));
-    O_var(i)=var(O_data(ia(i):ia(i+1)));
+    indices=ia(i):ia(i+1);
+    O_mean(i)=mean(O_data(indices));
+    O_std(i)=std(O_data(indices));
+    
+    numBootstrp=min(1E3,length(indices));
+    [ci, ~]=bootci(numBootstrp,{@var,O_data(indices)},'Options',statset('UseParallel',true));
+    O_var(i)=mean(ci);
+    O_var_err(i)=diff(ci)/2;
     
     maxlag=round((ia(i+1)-ia(i))/5,0);
     [acf,~,bounds]=autocorr(O_data(ia(i):ia(i+1)),maxlag);

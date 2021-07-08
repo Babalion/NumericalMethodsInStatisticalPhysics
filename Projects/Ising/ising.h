@@ -116,16 +116,19 @@ public:
             std::cerr << "This simulation is already finished.\n";
         } else {
             for (unsigned int i = 0; i < temps.size(); i++) {
-                metropolisSweep(sl, temps[i], 50);
+                // shuffle sl to obtain maybe a different equilibrate state
+                if (i % shuffleAgainAfter == 0) {
+                    sl.initRandom();
+                    metropolisSweep(sl, temps[i], 1000);
+                    auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+                    std::cout.precision(3);
+                    std::cout << std::ctime(&time) << "N="<<sights<<"\tprogress:" << 100.0f*i/temps.size() <<"%"<< std::endl;
+                }
+                metropolisSweep(sl, temps[i], 200);
                 energies.push_back(sl.calcEnergy());
                 magnetization.push_back(sl.calcMagnetization());
                 susceptibility.push_back(sl.calcSusceptibility());
                 heatCapacity.push_back(sl.calcHeatCapacity());
-                // shuffle sl to obtain maybe a different equilibrate state
-                if (i % shuffleAgainAfter == 0) {
-                    sl.initRandom();
-                    metropolisSweep(sl, temps[i], 100);
-                }
                 if (i > 0 && i % numOfIterations == 0) {
                     auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
                     std::cout << std::ctime(&time) << "done temp " << temps[i] << ". Remaining: "
@@ -198,8 +201,10 @@ public:
         }
 
         for (const auto &Simulations:Sims) {
+            //TODO check if measurements correspond to temps
+#ifdef DEBUG
             std::cout << "Simulations.getTemps().size()=" << Simulations.getTemps().size() << std::endl;
-            //temps.insert(end(temps), begin(Simulations.getTemps()), end(Simulations.getTemps()));
+#endif
             energies.insert(end(energies), begin(Simulations.getEnergies()), end(Simulations.getEnergies()));
             magnetization.insert(end(magnetization), begin(Simulations.getMagnetization()),
                                  end(Simulations.getMagnetization()));
