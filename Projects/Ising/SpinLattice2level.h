@@ -7,7 +7,6 @@
 #include <random>
 #include <iostream>
 #include <cassert>
-//#include <opencv2/opencv.hpp>
 
 // a quadratic 2-level ising-lattice
 class SpinLattice2level {

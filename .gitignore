@@ -1,8 +1,8 @@
 # MATLAB
     # Windows default autosave extension
-    *.asv
+*.asv
     # OSX / *nix default autosave extension
-    *.m~
+*.m~
 
 
 # Compiled Object files

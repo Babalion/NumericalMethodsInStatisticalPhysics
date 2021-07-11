@@ -197,7 +197,7 @@ void heatBathSweep(SpinLattice2level &spinLattice, float temp) {
         for (size_t j = 0; j < spinLattice.getSights(); j += 1) {
             const int delta = heatBathSumOfNeighbours(spinLattice, i, j);
             const float k = static_cast<float>(-1 * J_val * delta) / temp;
-            const float q = exp(-1.0f * k) / 2.0f / cosh(k);
+            const float q = std::exp(-1.0f * k) / 2.0f / std::cosh(k);
             const float r = spinLattice.u_float_dist(mt);
             if (r < q) {
                 spinLattice(i, j) = 1;
@@ -219,7 +219,7 @@ void heatBathSweepRandChoice(SpinLattice2level &spinLattice, float temp) {
 
         const int delta = heatBathSumOfNeighbours(spinLattice, x, y);
         const float k = static_cast<float>(-1 * J_val * delta) / temp;
-        const float q = exp(-1.0f * k) / 2.0f / cosh(k);
+        const float q = std::exp(-1.0f * k) / 2.0f / std::cosh(k);
         const float r = spinLattice.u_float_dist(spinLattice.mt);
         if (r < q) {
             spinLattice(x, y) = 1;

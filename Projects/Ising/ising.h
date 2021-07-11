@@ -11,79 +11,6 @@
 #include <string>
 #include <thread>
 
-/*
-struct workerTask1 {
-    workerTask1(int N, int h, int noOfTemps, float tempStart, float tempEnd, int numOfIterations,
-                unsigned int shuffleAgainAfter)
-            : N(N), h(h), noOfTemps(noOfTemps), numOfIterations(numOfIterations), shuffleAgainAfter(shuffleAgainAfter),
-              magnetization(noOfTemps), energy(noOfTemps), susceptibility(noOfTemps), heatCapacity(noOfTemps) {
-
-        const float tempStep = (tempEnd - tempStart) / (noOfTemps - 1);
-        for (int i = 0; i < noOfTemps; ++i) {
-            // calculate temperatures
-            temps.push_back(static_cast<float>(i) * tempStep + tempStart);
-
-            // reserve memory for all vectors
-            magnetization[i].reserve(numOfIterations);
-            energy[i].reserve(numOfIterations);
-            susceptibility[i].reserve(numOfIterations);
-            heatCapacity[i].reserve(numOfIterations);
-        }
-    };
-    const int N;
-    const short h;
-    const int noOfTemps;
-    const int numOfIterations;
-    const unsigned int shuffleAgainAfter;
-    std::vector<std::vector<float>> magnetization;
-    std::vector<std::vector<float>> energy;
-    std::vector<std::vector<float>> susceptibility;
-    std::vector<std::vector<float>> heatCapacity;
-
-    // std::vector<SpinLattice2level> sl; //this is later the number of parallel ensembles (--> number of threads)
-    [[nodiscard]] const std::vector<float> &getTemps() const {
-        return temps;
-    }
-
-private:
-    std::vector<float> temps;
-};
-*/
-/**
- * Calculates wk.energy etc. for given indices as sequential job.
- * This is a helper class for the parallel function see below.
- *
- * @param wk all data of all parallel ensembles
- * @param tempsToCalc the indices of wk.temp which should be calculated in this thread
- * @param threadId consecutive number for each thread
- */
-/*
-void runWorkTask1Serial(workerTask1 &wk, const std::vector<float> &tempsToCalc, unsigned int threadId) {
-   SpinLattice2level sl(wk.N, wk.h);
-   for (unsigned int i = 0; i < tempsToCalc.size(); i++) {
-       sl.initRandom();
-       //thermalize first
-       metropolisSweep(sl, tempsToCalc[i], 100);
-       for (int j = 0; j < wk.numOfIterations; ++j) {
-           metropolisSweep(sl, tempsToCalc[i], 50);
-           wk.magnetization[i].push_back(sl.calcMagnetization());
-           wk.energy[i].push_back(sl.calcEnergy());
-           wk.susceptibility[i].push_back(sl.calcSusceptibility());
-           wk.heatCapacity[i].push_back(sl.calcHeatCapacity());
-           if (j > 0 && j % wk.shuffleAgainAfter == 0) { //initialize new
-               sl.initRandom();
-               //thermalize again
-               metropolisSweep(sl, tempsToCalc[i], 100);
-           }
-       }
-       auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-       std::cout << std::ctime(&time) << "done temp " << tempsToCalc[i] << " in thread " << threadId
-                 << ". Remaining: "
-                 << tempsToCalc.size() - i << std::endl;
-   }
-}*/
-
-
 class Simulation {
 public:
     /**
@@ -97,19 +24,11 @@ public:
      */
     Simulation(unsigned int sights, int numOfTemps, float tempStart, float tempEnd, int numIterations,
                unsigned int shuffleAgainAfter)
-            : sights(sights), tempStart(tempStart), tempEnd(tempEnd), numOfTemps(numOfTemps),
+            : thermalizeSweeps(1000),sweepsPerIteration(1E4), sights(sights), tempStart(tempStart), tempEnd(tempEnd), numOfTemps(numOfTemps),
               numOfIterations(numIterations),
               shuffleAgainAfter(shuffleAgainAfter), sl(sights), isSimulated(false) {
         init();
     }
-
-/*
-    Simulation(const Simulation &other)
-            : sights(other.sights), tempStart(other.tempStart), tempEnd(other.tempEnd), numOfTemps(other.numOfTemps),
-              numOfIterations(other.numOfIterations),
-              shuffleAgainAfter(other.shuffleAgainAfter), sl(other.sights), isSimulated(false) {
-    }
-*/
 
     void simulate_seq() {
         if (isSimulated) {
@@ -118,13 +37,14 @@ public:
             for (unsigned int i = 0; i < temps.size(); i++) {
                 // shuffle sl to obtain maybe a different equilibrate state
                 if (i % shuffleAgainAfter == 0) {
+                    std::cout<<"Shuffle!!<<\n";
                     sl.initRandom();
-                    metropolisSweep(sl, temps[i], 1000);
+                    metropolisSweep(sl, temps[i], thermalizeSweeps);
                     auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
                     std::cout.precision(3);
                     std::cout << std::ctime(&time) << "N="<<sights<<"\tprogress:" << 100.0f*i/temps.size() <<"%"<< std::endl;
                 }
-                metropolisSweep(sl, temps[i], 200);
+                metropolisSweep(sl, temps[i], sweepsPerIteration);
                 energies.push_back(sl.calcEnergy());
                 magnetization.push_back(sl.calcMagnetization());
                 susceptibility.push_back(sl.calcSusceptibility());
@@ -268,6 +188,9 @@ public:
         return heatCapacity;
     }
 
+public:
+    unsigned int thermalizeSweeps;
+    unsigned int sweepsPerIteration;
 private:
     /// Parameters for simulation
     unsigned int sights;

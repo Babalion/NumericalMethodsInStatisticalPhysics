@@ -16,10 +16,16 @@ for i=1:numOfTemps
     O_mean(i)=mean(O_data(indices));
     O_std(i)=std(O_data(indices));
     
-    numBootstrp=min(1E3,length(indices));
-    [ci, ~]=bootci(numBootstrp,{@var,O_data(indices)},'Options',statset('UseParallel',true));
-    O_var(i)=mean(ci);
-    O_var_err(i)=diff(ci)/2;
+    numBootstrp=min(5E2,length(indices));
+    if length(indices)>1E4
+        %[ci, ~]=bootci(numBootstrp,{@var,O_data(indices)},'Options',statset('UseParallel',true));
+        O_var(i)=var(O_data(indices));
+        O_var_err(i)=0;
+    else
+        [ci, ~]=bootci(numBootstrp,{@var,O_data(indices)},'Options',statset('UseParallel',true));
+        O_var(i)=mean(ci);
+        O_var_err(i)=diff(ci)/2;
+    end
     
     maxlag=round((ia(i+1)-ia(i))/5,0);
     [acf,~,bounds]=autocorr(O_data(ia(i):ia(i+1)),maxlag);
