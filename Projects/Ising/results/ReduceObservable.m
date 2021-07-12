@@ -1,5 +1,7 @@
-function [O_mean,O_std,O_var,O_var_err,O_weight,O_corrLength] = ReduceObservable(O_data,temp)
+function [O_mean,O_std,O_var,O_var_err,O_weight,O_corrLength] = ReduceObservable(O_data_dist,temp_dist)
 
+O_data=gather(O_data_dist);
+temp=gather(temp_dist);
 [C,ia,~]=unique(temp);
 numOfTemps=length(C);
 
@@ -12,7 +14,12 @@ O_corrLength=zeros([numOfTemps,1]);
 
 ia(end+1)=length(temp);
 for i=1:numOfTemps
-    indices=ia(i):ia(i+1);
+    indices=ia(i):(ia(i+1)-1);
+    if(temp(indices(1))~=temp(indices(end)))
+        temp(indices(1))
+        temp(indices(end))
+        error("indices do not match");
+    end
     O_mean(i)=mean(O_data(indices));
     O_std(i)=std(O_data(indices));
     

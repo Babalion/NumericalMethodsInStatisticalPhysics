@@ -34,9 +34,9 @@ if(max(N)~=min(N))
     error("wrong separation of data! (correct dataLineStart and dataLineEnd)")
 end
 N=N(1);
-temp = tbl.temp;
-magnetization = tbl.magnetization;
-energy = tbl.energy;
+temp = distributed(tbl.temp);
+magnetization = distributed(tbl.magnetization);
+energy = distributed(tbl.energy);
 susceptibility = tbl.susceptibility;
 heatCapacity = tbl.heatCapacity;
 
