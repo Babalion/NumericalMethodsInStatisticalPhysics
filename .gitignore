@@ -62,3 +62,5 @@ bin/*
 test/test_runner
 /cmake-build-release/
 /cmake-build-debug/
+*.tsv
+*.mat
